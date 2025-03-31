@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.blockninja'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    implementation files('libs/mcreator.jar')
+    implementation 'org.apache.logging.log4j:log4j-api:2.24.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
+    implementation 'org.freemarker:freemarker:2.3.31'
+}
+
+tasks.register('zipPlugin') {
+    group = 'Plugin'
+    description = 'Build plugin .jar and transform to .zip'
+    println "----- Building jar -----"
+    dependsOn tasks.build
+    doLast {
+        println '----- Turning to zip -----'
+        def fileName = "${project.name}-${version}"
+        def jarFile = file("build/libs/${fileName}.jar")
+
+        copy {
+            from jarFile
+            into "build/libs/"
+            rename { "${fileName}.zip" }
+        }
+
+        def zipFile = file("build/libs/${fileName}.zip")
+        println "----- Plugin zipped to: ${zipFile.absolutePath} -----"
+    }
+}
+
+tasks.register('deployPlugin') {
+    group = 'Plugin'
+    description = 'Move built plugin to mcreator plugin folder'
+    dependsOn tasks.zipPlugin
+    doLast {
+        println '----- Moving plugin -----'
+        def fileName = "${project.name}-${version}"
+        def zipFile = file("build/libs/${fileName}.zip")
+
+        copy {
+            from zipFile
+            into plugin_dir
+        }
+
+        println "----- Moved plugin to: ${plugin_dir} -----"
+    }
+}
+
+tasks.register('runMCreatorWithPlugin', Exec) {
+    group = 'Plugin'
+    description = 'Run MCreator after building plugin'
+    dependsOn tasks.deployPlugin
+
+    commandLine exe_path
+}
+
+test {
+    useJUnitPlatform()
+}
