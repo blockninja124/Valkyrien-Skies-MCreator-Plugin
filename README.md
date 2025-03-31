@@ -1,6 +1,19 @@
 This mod allows you to use some of Valkyrien Skies's API in your MCreator mod.
 
-## What it adds
+# How to build this repository
+To get a usable plugin zip file,
+import this project as a Java Gradle project into your IDE of choice (IntelliJ, Eclipse, or VSCode).
+Then, run the gradle task `zipPlugin`. In `build/libs` there should now be a `.zip` file. This can be used as a plugin.
+
+For easy development, you can specify the `plugin_dir` and `exe_path` in `gradle.properties`.
+This will allow you to run the `runMCreatorWithPlugin` task, which will build, zip, and move your plugin, then run MCreator.
+(and allow you to see the MCreator log in console). 
+
+Your plugin directory is where the plugin is to be moved. Usually something like `C:/Users/<Your User>/.mcreator/plugins`.
+The `exe_path` is the path to the MCreator executable to be run, which can vary depending on where you installed it.
+Usually something like `C:/Program Files/Pylo/MCreator/mcreator.exe`
+
+# What it adds
 
 **New procedures:**
 
@@ -76,3 +89,4 @@ If for some reason you no longer wish to use this plugin, follow these steps:
 1. Disable the API in workspace settings. **This should cause a workspace re-factor.**
 2. After workspace re-factor, **some procedures may fail to build**. Simply go into each and delete any remaining Valkyrien Skies procedure blocks
 3. Then remove the plugin from your plugin folder, or disable it. **Don't** re-open your workspace with the plugin still enabled! The re-factor when you disabled the API will have deleted the extra files mentioned above, but if you re-open your workspace with the plugin they will come back! **You may need to delete them manually**.
+
