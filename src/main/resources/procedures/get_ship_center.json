@@ -1,0 +1,32 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "var",
+      "check": "Ship"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "pos",
+      "options": [
+        [ "Shipyard", "Ship" ],
+        [ "World", "World" ]
+      ]
+    }
+  ],
+  "inputsInline": true,
+  "output": "Vec3",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "var"
+    ],
+    "fields": [
+      "pos"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

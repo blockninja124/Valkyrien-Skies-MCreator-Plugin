@@ -1,0 +1,21 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    }
+  ],
+  "inputsInline": true,
+  "output": "Boolean",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "ship"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

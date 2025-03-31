@@ -1,0 +1,27 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "dataName",
+      "check": "String"
+    },
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    }
+  ],
+  "inputsInline": true,
+  "output": "Boolean",
+  "colour": "%{BKY_LOGIC_HUE}",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "toolbox_init": [
+      "<value name=\"dataName\"><block type=\"text\"><field name=\"TEXT\">dataName</field></block></value>"
+    ],
+    "inputs": [
+      "dataName",
+      "ship"
+    ]
+  }
+}

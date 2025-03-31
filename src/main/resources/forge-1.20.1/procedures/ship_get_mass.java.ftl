@@ -1,0 +1,1 @@
+(${input$ship} instanceof ServerShip) ? ((ServerShip) ${input$ship}).getInertiaData().getMass() : 0)

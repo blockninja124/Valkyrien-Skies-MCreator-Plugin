@@ -1,0 +1,37 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "vec",
+      "check": "Vec3"
+    }
+  ],
+  "inputsInline": true,
+  "nextStatement": null,
+  "previousStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "toolbox_init": [
+      "<value name=\"vec\"><block type=\"vec3_constructor\"><value name=\"x\"><block type=\"math_number\"><field name=\"NUM\">0</field></block></value><value name=\"y\"><block type=\"math_number\"><field name=\"NUM\">0</field></block></value><value name=\"z\"><block type=\"math_number\"><field name=\"NUM\">0</field></block></value></block></value>"
+    ],
+    "inputs": [
+      "ship",
+      "vec"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

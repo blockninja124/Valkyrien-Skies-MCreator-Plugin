@@ -1,0 +1,1 @@
+((${input$var} != null) ? ${input$var}.getChunkClaimDimension() : "null")

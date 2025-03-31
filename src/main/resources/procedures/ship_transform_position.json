@@ -1,0 +1,38 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "var",
+      "check": "Ship"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "direction",
+      "options": [
+        [ "Ship -> World", "ShipToWorld" ],
+        [ "World -> Ship", "WorldToShip" ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "var2",
+      "check": "Vec3"
+    }
+  ],
+  "inputsInline": true,
+  "output": "Vec3",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "var",
+      "var2"
+    ],
+    "fields": [
+      "direction"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

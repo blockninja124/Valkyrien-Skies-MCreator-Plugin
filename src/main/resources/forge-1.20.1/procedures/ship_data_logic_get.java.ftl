@@ -1,0 +1,1 @@
+((${input$ship} instanceof ServerShip) ? ForceInducedShips.getOrCreate((ServerShip) ${input$ship}).getBoolData(${input$dataName}) : "")

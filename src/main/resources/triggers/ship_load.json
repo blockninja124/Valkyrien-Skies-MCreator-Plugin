@@ -1,0 +1,10 @@
+{
+    "dependencies_provided": [
+      {
+        "name": "loadedShip",
+        "type": "ship"
+      }
+    ],
+    "cancelable": "false",
+    "has_result": "false"
+  }

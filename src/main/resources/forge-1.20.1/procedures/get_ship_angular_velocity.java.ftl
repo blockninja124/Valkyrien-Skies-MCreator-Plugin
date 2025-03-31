@@ -1,0 +1,1 @@
+((${input$var} != null) ? VectorConversionsMCKt.toMinecraft(${input$var}.getOmega()) : new Vec3(0, 0, 0))

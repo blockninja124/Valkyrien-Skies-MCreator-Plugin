@@ -1,0 +1,34 @@
+---
+forge-1.20.1:
+  gradle: |
+    repositories {
+        maven {
+            name = "Kotlin for Forge"
+            url = "https://thedarkcolour.github.io/KotlinForForge/"
+            content {
+                includeModule("thedarkcolour", "kotlinforforge")
+            }
+        }
+        maven {
+            name = "Valkyrien Skies Internal"
+            url = "https://maven.valkyrienskies.org"
+            content {
+                excludeGroup("org.spongepowered")
+                excludeGroup("net.jodah")
+            }
+        }
+    }
+
+    dependencies {
+        implementation         ("org.valkyrienskies.core:api:1.1.0+b19b27c4a4")
+        implementation         ("org.valkyrienskies.core:impl:1.1.0+b19b27c4a4")
+        implementation         ("org.valkyrienskies.core:api-game:1.1.0+b19b27c4a4")
+        implementation         ("org.valkyrienskies.core:util:1.1.0+b19b27c4a4")
+        implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:2.3.0-beta.5+bcda04a482")
+
+        implementation "thedarkcolour:kotlinforforge:4.10.0"
+    }
+  update_files:
+    - ~
+  required_when_enabled: true
+name: "valkyrienskies"

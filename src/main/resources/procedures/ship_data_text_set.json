@@ -1,0 +1,35 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "dataName",
+      "check": "String"
+    },
+    {
+      "type": "input_value",
+      "name": "dataValue",
+      "check": "String"
+    },
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "%{BKY_TEXTS_HUE}",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "toolbox_init": [
+      "<value name=\"dataName\"><block type=\"text\"><field name=\"TEXT\">dataName</field></block></value>",
+      "<value name=\"dataValue\"><block type=\"text\"><field name=\"TEXT\">dataValue</field></block></value>"
+    ],
+    "inputs": [
+      "dataName",
+      "dataValue",
+      "ship"
+    ]
+  }
+}

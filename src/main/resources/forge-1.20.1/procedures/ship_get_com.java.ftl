@@ -1,0 +1,1 @@
+((${input$ship} instanceof ServerShip) ? VectorConversionsMCKt.toMinecraft(((ServerShip) ${input$ship}).getInertiaData().getCenterOfMassInShip()) : new Vec3(0, 0, 0))

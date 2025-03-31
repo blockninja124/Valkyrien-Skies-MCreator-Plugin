@@ -1,0 +1,13 @@
+{
+  "output": "Ship",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "mcelements",
+    "dependencies": [
+      {
+        "name": "shipiterator",
+        "type": "ship"
+      }
+    ]
+  }
+}
