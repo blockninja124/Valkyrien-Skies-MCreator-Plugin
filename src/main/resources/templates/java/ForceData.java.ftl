@@ -3,11 +3,11 @@ package ${package}.ships;
 public class ForceData {
 
     public final Vector3d dir;
-    public volatile float throttle;
+    public volatile double throttle;
     public volatile ForceMode mode;
     public volatile ForceDirectionMode dirMode;
 
-    public ForceData(Vector3d dir, float throttle, ForceMode mode, ForceDirectionMode dirMode) {
+    public ForceData(Vector3d dir, double throttle, ForceMode mode, ForceDirectionMode dirMode) {
         this.dir = dir;
         this.throttle = throttle;
         this.mode = mode;

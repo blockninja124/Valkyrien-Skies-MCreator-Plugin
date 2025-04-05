@@ -35,8 +35,8 @@ public class ForceInducedShips implements ShipForcesInducer {
             BlockPos pos = pair.getFirst();
             ForceData data = pair.getSecond();
 
-            float throttle = data.throttle;
-            if (throttle == 0.0f) {
+            double throttle = data.throttle;
+            if (throttle == 0.0) {
                 continue;
             }
 
@@ -68,7 +68,7 @@ public class ForceInducedShips implements ShipForcesInducer {
         nextTickForces.push(new com.mojang.datafixers.util.Pair<>(pos, data));
     }
 
-    public void addForce(BlockPos pos, Vector3d dir, float throttle, ForceMode mode, ForceDirectionMode dirMode) {
+    public void addForce(BlockPos pos, Vector3d dir, double throttle, ForceMode mode, ForceDirectionMode dirMode) {
         nextTickForces.push(new com.mojang.datafixers.util.Pair<>(pos, new ForceData(dir, throttle, mode, dirMode)));
     }
 
