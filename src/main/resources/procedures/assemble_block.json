@@ -1,0 +1,28 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pos",
+      "check": "BlockPos"
+    }
+  ],
+  "inputsInline": true,
+  "nextStatement": null,
+  "previousStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "inputs": [
+      "pos"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

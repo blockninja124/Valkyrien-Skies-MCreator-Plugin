@@ -1,0 +1,37 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pos",
+      "check": "BlockPos"
+    },
+    {
+      "type": "input_value",
+      "name": "scale",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "nextStatement": null,
+  "previousStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "toolbox_init": [
+      "<value name=\"scale\"><block type=\"math_number\"><field name=\"NUM\">1.0</field></block></value>"
+    ],
+    "inputs": [
+      "pos",
+      "scale"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}
