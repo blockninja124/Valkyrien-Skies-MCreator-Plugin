@@ -1,0 +1,34 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "scale",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "ship",
+      "scale"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}
