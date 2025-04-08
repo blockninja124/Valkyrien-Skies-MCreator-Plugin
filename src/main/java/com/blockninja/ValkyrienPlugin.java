@@ -16,6 +16,8 @@ import net.mcreator.plugin.events.workspace.MCreatorLoadedEvent;
 import net.mcreator.io.FileIO;
 import net.mcreator.plugin.events.workspace.WorkspaceRefactoringEvent;
 import net.mcreator.plugin.events.workspace.WorkspaceSavedEvent;
+import net.mcreator.plugin.modapis.ModAPIImplementation;
+import net.mcreator.plugin.modapis.ModAPIManager;
 import net.mcreator.ui.MCreator;
 import net.mcreator.ui.action.ActionRegistry;
 import net.mcreator.workspace.Workspace;
@@ -51,6 +53,11 @@ public class ValkyrienPlugin extends JavaPlugin {
 
         if (currentGenerator != null && currentGenerator.getGeneratorConfiguration().getGeneratorFlavor() == GeneratorFlavor.FORGE) {
             WorkspaceSettings workspaceSettings = mcreator.getWorkspaceSettings();
+
+            if (!workspaceSettings.getMCreatorDependencies().contains("valkyrienskies")) {
+                return;
+            }
+
             String modid = workspaceSettings.getModID();
             String modname = workspaceSettings.getJavaModName();
 
@@ -63,7 +70,7 @@ public class ValkyrienPlugin extends JavaPlugin {
             String codeFolder = "src/main/java/" + workspaceSettings.getModElementsPackage().replace(".", "/") + "/ships/";
 
             //TODO: get all files in DIR
-            List<String> templates = List.of("ForceData", "ForceDirectionMode", "ForceInducedShips", "ForceMode", "OnShipLoad", "RotData", "TeleportHandler");
+            List<String> templates = List.of("ForceData", "ForceDirectionMode", "ForceInducedShips", "ForceMode", "OnShipLoad", "RotData", "ShipMaker", "TeleportHandler");
 
             for (String template : templates) {
                 File javaFile = new File(mcreator.getWorkspaceFolder(), codeFolder + template + ".java");
