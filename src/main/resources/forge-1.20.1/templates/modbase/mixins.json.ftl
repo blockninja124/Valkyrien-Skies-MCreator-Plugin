@@ -1,4 +1,5 @@
 <#assign mixins = []>
+
 <#list w.getWorkspace().getModElements() as element>
   <#assign providedmixins = []>
   <#if element.getGeneratableElement().mixins??>
@@ -12,7 +13,11 @@
     </#list>
   </#if>
 </#list>
+
+<#assign hasValk = settings.MCreatorDependencies?seq_contains("valkyrienskies")>
+<#if hasValk>
 <#assign mixins = mixins + ["ServerShipObjectWorldAccessor"]>
+</#if>
 {
   "required": true,
   "package": "${package}.mixins",
