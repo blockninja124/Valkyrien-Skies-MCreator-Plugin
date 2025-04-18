@@ -1,0 +1,1 @@
+(${input$var} != null && ${input$var2} != null && (${input$var}.getId() == ${input$var2}.getId()))

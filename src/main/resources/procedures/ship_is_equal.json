@@ -1,0 +1,24 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "var",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "var2",
+      "check": "Ship"
+    }
+  ],
+  "inputsInline": true,
+  "output": "Boolean",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "logicoperations",
+    "inputs": [
+      "var",
+      "var2"
+    ]
+  }
+}
