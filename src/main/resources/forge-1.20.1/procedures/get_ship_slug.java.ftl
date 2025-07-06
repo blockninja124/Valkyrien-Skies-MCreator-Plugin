@@ -1,1 +1,9 @@
-((${input$var} != null) ? ${input$var}.getSlug() : "null")
+<#include "macros.ftl">
+
+<@withSupplier "String" '
+    Ship ship = ${input$var};
+    if (ship != null) {
+        return ship.getSlug();
+    }
+    return "null";
+'/>

@@ -1,1 +1,10 @@
-((${input$ship} instanceof ServerShip) ? ((ServerShip) ${input$ship}).isStatic() : false)
+<#include "macros.ftl">
+
+<@withSupplier "Boolean" '
+    Ship ship = ${input$ship};
+    if (ship instanceof ServerShip) {
+        return ((ServerShip) ship).isStatic();
+    }
+    return false;
+'/>
+

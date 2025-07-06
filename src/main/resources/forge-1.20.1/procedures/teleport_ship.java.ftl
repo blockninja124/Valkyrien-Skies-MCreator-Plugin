@@ -1,5 +1,6 @@
 {
-    if (world instanceof ServerLevel sl && ${input$ship} instanceof Ship) {
-        new TeleportHandler(sl, sl, false).handleTeleport(${input$ship}, VectorConversionsMCKt.toJOML(${input$vec}));
+    Ship tempShip = ${input$ship};
+    if (world instanceof ServerLevel sl && tempShip != null) {
+        new TeleportHandler(sl, sl, false).handleTeleport(tempShip, VectorConversionsMCKt.toJOML(${input$vec}));
     }
 }

@@ -1,5 +1,6 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ((ServerShip) ${input$ship}).setSlug(${input$str});
+    Ship tempShip = ${input$ship};
+    if (tempShip instanceof ServerShip) {
+        ((ServerShip) tempShip).setSlug(${input$str});
     }
 }

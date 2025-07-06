@@ -70,7 +70,7 @@ public class ValkyrienPlugin extends JavaPlugin {
             String codeFolder = "src/main/java/" + workspaceSettings.getModElementsPackage().replace(".", "/") + "/ships/";
 
             //TODO: get all files in DIR
-            List<String> templates = List.of("ForceData", "ForceDirectionMode", "ForceInducedShips", "ForceMode", "OnShipLoad", "RotData", "ShipMaker", "TeleportHandler");
+            List<String> templates = List.of("ForceData", "ForceDirectionMode", "ForceInducedShips", "ForceMode", "OnShipLoad", "RotData", "ShipMaker", "TeleportHandler", "ShipTickEvent");
 
             for (String template : templates) {
                 File javaFile = new File(mcreator.getWorkspaceFolder(), codeFolder + template + ".java");

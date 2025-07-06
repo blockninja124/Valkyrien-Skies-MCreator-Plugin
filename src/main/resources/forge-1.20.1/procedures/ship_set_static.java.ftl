@@ -1,5 +1,6 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ((ServerShip) ${input$ship}).setStatic(${input$bool});
+    Ship tempShip = ${input$ship};
+    if (tempShip instanceof ServerShip) {
+        ((ServerShip) tempShip).setStatic(${input$bool});
     }
 }
