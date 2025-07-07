@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class JavaTemplateParser {
-    public static final String TEMPLATES_DIR = "templates/java/";
+    public static final String TEMPLATES_DIR = "forge-1.20.1/templates/java/";
     private static final Logger LOG = LogManager.getLogger(ValkyrienPlugin.LOG_NAME);
 
     /**
