@@ -88,6 +88,7 @@ public class ValkyrienPlugin extends JavaPlugin {
 
             File javaFile = new File(mcreator.getWorkspaceFolder(), "src/main/java/" + workspaceSettings.getModElementsPackage().replace(".", "/") + "/mixins/" + "ServerShipObjectWorldAccessor.java");
             if (!javaFile.exists()) {
+                /*
                 try {
                     String formattedCode = JavaTemplateParser.fullyParseTemplate(mcreator, "ServerShipObjectWorldAccessor");
                     FileIO.writeStringToFile(formattedCode, javaFile);
@@ -96,6 +97,7 @@ public class ValkyrienPlugin extends JavaPlugin {
                 } catch (Exception e) {
                     LOG.error("Error generating ServerShipObjectWorldAccessor.java!", e);
                 }
+                */
             }
         }
     }

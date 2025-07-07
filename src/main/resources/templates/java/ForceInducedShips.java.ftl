@@ -1,6 +1,6 @@
 package ${package}.ships;
 
-public class ForceInducedShips implements ShipForcesInducer {
+public class ForceInducedShips implements ShipPhysicsListener {
     public Stack<com.mojang.datafixers.util.Pair<BlockPos, ForceData>> nextTickForces = new Stack<>();
     public Stack<RotData> nextTickRotations = new Stack<>();
 
@@ -12,7 +12,7 @@ public class ForceInducedShips implements ShipForcesInducer {
     public ForceInducedShips() {}
 
     @Override
-    public void applyForces(@NotNull PhysShip physicShip) {
+    public void physTick(@NotNull PhysShip physicShip, @NotNull PhysLevel physLevel) {
         PhysShipImpl physShip = (PhysShipImpl) physicShip;
 
         while(!nextTickRotations.isEmpty()) {

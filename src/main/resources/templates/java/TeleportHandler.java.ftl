@@ -3,8 +3,8 @@ package ${package}.ships;
 // This class is straight up yoinked from starlance, I should probably simplify it at some point
 public class TeleportHandler {
     
-    private static final Map<Long, Set<Integer>> shipIdToConstraints = ((${package}.mixins.ServerShipObjectWorldAccessor) VSGameUtilsKt.getShipObjectWorld(ValkyrienSkiesMod.getCurrentServer())).getShipIdToConstraints();
-    private static final Map<Integer, VSConstraint> constraintIdToConstraint = ((${package}.mixins.ServerShipObjectWorldAccessor) VSGameUtilsKt.getShipObjectWorld(ValkyrienSkiesMod.getCurrentServer())).getConstraints();
+    private static final Map<Long, Set<Integer>> shipIdToConstraints = new HashMap<>();
+    private static final Map<Integer, VSConstraint> constraintIdToConstraint = new HashMap<>();
     
     private final Map<Long, Vector3d> shipToPos = new HashMap<>();
     private final ServerShipWorldCore shipWorld;
