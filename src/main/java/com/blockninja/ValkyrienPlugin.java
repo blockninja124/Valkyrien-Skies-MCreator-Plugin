@@ -2,6 +2,9 @@ package com.blockninja;
 
 import com.blockninja.util.JavaTemplateParser;
 import freemarker.template.Template;
+import net.mcreator.element.GeneratableElement;
+import net.mcreator.element.types.Procedure;
+import net.mcreator.element.types.interfaces.ITabContainedElement;
 import net.mcreator.generator.Generator;
 import net.mcreator.generator.GeneratorFlavor;
 import net.mcreator.generator.template.InlineTemplatesHandler;
@@ -22,6 +25,8 @@ import net.mcreator.ui.MCreator;
 import net.mcreator.ui.action.ActionRegistry;
 import net.mcreator.workspace.Workspace;
 import net.mcreator.workspace.WorkspaceFileManager;
+import net.mcreator.workspace.elements.ModElement;
+import net.mcreator.workspace.misc.WorkspaceInfo;
 import net.mcreator.workspace.settings.WorkspaceSettings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,8 +34,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ValkyrienPlugin extends JavaPlugin {
     public static final String LOG_NAME = "Valkyrien";
@@ -42,9 +49,18 @@ public class ValkyrienPlugin extends JavaPlugin {
         this.addListener(MCreatorLoadedEvent.class, new MCREventListener<MCreatorLoadedEvent>() {
             @Override
             public void eventTriggered(MCreatorLoadedEvent mCreatorLoadedEvent) {
-                onLoad(mCreatorLoadedEvent.getMCreator());
+//                onLoad(mCreatorLoadedEvent.getMCreator());
+                usesShipTeleport(mCreatorLoadedEvent.getMCreator().getWorkspace().getWorkspaceInfo());
             }
         });
+    }
+
+    public static void usesShipTeleport(WorkspaceInfo info){
+        for(GeneratableElement element : info.workspace().getModElements().stream().map(ModElement::getGeneratableElement).filter(Objects::nonNull).toList()) {
+            if (element instanceof Procedure procedure) {
+                System.out.println(((Collection<String>)((Map<String,Object>)procedure.getAdditionalTemplateData()).get("procedureblocks")).toString());
+            }
+        }
     }
 
 
