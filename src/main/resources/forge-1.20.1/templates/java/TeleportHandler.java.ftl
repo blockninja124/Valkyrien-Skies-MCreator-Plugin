@@ -3,11 +3,8 @@ package ${package}.ships;
 // This class is straight up yoinked from starlance, I should probably simplify it at some point
 public class TeleportHandler {
     
-    private static final Map<Long, Set<Integer>> shipIdToConstraints = new HashMap<>();
-    private static final Map<Integer, VSConstraint> constraintIdToConstraint = new HashMap<>();
-    
-    private final Map<Long, Vector3d> shipToPos = new HashMap<>();
-    private final ServerShipWorldCore shipWorld;
+    /*private final Map<Long, Vector3d> shipToPos = new HashMap<>();
+    private final LoadedServerShipWorldCore shipWorld;
     private double greatestOffset;
     private final ServerLevel newDim;
     private final ServerLevel originalDim;
@@ -70,7 +67,7 @@ public class TeleportHandler {
 
             if (shipToPos.containsKey(id)) return;
 
-            QueryableShipData<LoadedServerShip> loadedShips = shipWorld.getLoadedShips();
+            QueryableShipData<LoadedLoadedServerShip> loadedShips = shipWorld.getLoadedShips();
             Ship ship = loadedShips.getById(id);
 
             if (ship == null) return;
@@ -91,7 +88,7 @@ public class TeleportHandler {
     }
     
     private void dismountEntities(Long id) {
-        ServerShip ship = shipWorld.getLoadedShips().getById(id);
+        LoadedServerShip ship = shipWorld.getLoadedShips().getById(id);
         if (ship == null) return;
         AABB inflatedAABB = VectorConversionsMCKt.toMinecraft(ship.getWorldAABB()).inflate(20);
         originalDim.getEntities(null, inflatedAABB).forEach((entity) -> {
@@ -102,24 +99,26 @@ public class TeleportHandler {
     private void handleShipTeleport(Long id, Vector3d newPos) {
         String vsDimName = ((DimensionIdProvider) newDim).getDimensionId();
 
-        ServerShip ship = shipWorld.getLoadedShips().getById(id);
+        LoadedServerShip ship = shipWorld.getLoadedShips().getById(id);
         if (ship == null) {
             PhysicsEntityServer physEntity = ((ShipObjectServerWorld) shipWorld).getLoadedPhysicsEntities().get(id);
             if (physEntity == null) {
                 return;
             }
-            ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos.add(0,greatestOffset,0), physEntity.getShipTransform().getShipToWorldRotation(), new Vector3d(), new Vector3d(), vsDimName, null);
+            // TODO: always sets scale to 1 find way to get scale from physEntity
+            final ShipTeleportData teleportData = new ShipTeleportDataImpl(targetPos, physEntity.getShipTransform().getShipToWorldRotation(), physEntity.getLinearVelocity(), physEntity.getAngularVelocity(), vsDimName, 1.0, null);
             shipWorld.teleportPhysicsEntity(physEntity, teleportData);
         }
-        ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos.add(0,greatestOffset,0), ship.getTransform().getShipToWorldRotation(), new Vector3d(), new Vector3d(), vsDimName, null);
+		final ShipTeleportData teleportData = new ShipTeleportDataImpl(targetPos, ship.getTransform().getShipToWorldRotation(), veloctiy, omega, vsDimName, 1.0, null);
         shipWorld.teleportShip(ship, teleportData);
     }
     
-    private static ShipTransform transformFromId(Long id, ServerShipWorldCore shipWorld) {
+    private static ShipTransform transformFromId(Long id, LoadedServerShipWorldCore shipWorld) {
         Ship ship = shipWorld.getAllShips().getById(id);
         if (ship == null) {
             PhysicsEntityServer physicsEntity = ((ShipObjectServerWorld)shipWorld).getLoadedPhysicsEntities().get(id);
-            if (physicsEntity == null) return new ShipTransformImpl(new Vector3d(), new Vector3d(), new Quaterniond(), new Vector3d());
+            // TODO: find new way to make empty transform
+            //if (physicsEntity == null) return new ShipTransformImpl(new Vector3d(), new Vector3d(), new Quaterniond(), new Vector3d());
             return physicsEntity.getShipTransform();
         }
         return ship.getTransform();
@@ -130,6 +129,6 @@ public class TeleportHandler {
         if (server == null) return null;
 
         return server.getLevel(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(dimensionString)));
-    }
+    }*/
 
 }

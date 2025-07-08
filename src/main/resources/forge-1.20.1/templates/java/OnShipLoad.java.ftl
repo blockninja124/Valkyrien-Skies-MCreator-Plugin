@@ -7,5 +7,12 @@ public class OnShipLoad {
         VSEvents.ShipLoadEvent.Companion.on((shipLoadEvent) -> {
             ForceInducedShips.getOrCreate(shipLoadEvent.getShip());
         });
+
+        AttachmentRegistration registration = ValkyrienSkies.api()
+            .newAttachmentRegistrationBuilder(ForceInducedShips.class)
+            .useLegacySerializer()
+            .build();
+
+        ValkyrienSkies.api().registerAttachment(registration);
     }
 }

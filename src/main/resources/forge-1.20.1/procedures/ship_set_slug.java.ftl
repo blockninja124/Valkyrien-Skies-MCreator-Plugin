@@ -1,5 +1,5 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ((ServerShip) ${input$ship}).setSlug(${input$str});
+    if (${input$ship} instanceof LoadedServerShip) {
+        ((LoadedServerShip) ${input$ship}).setSlug(${input$str});
     }
 }

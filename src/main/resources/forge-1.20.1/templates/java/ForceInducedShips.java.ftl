@@ -1,6 +1,6 @@
 package ${package}.ships;
 
-public class ForceInducedShips implements ShipPhysicsListener {
+public final class ForceInducedShips implements ShipPhysicsListener {
     public Stack<com.mojang.datafixers.util.Pair<BlockPos, ForceData>> nextTickForces = new Stack<>();
     public Stack<RotData> nextTickRotations = new Stack<>();
 
@@ -117,22 +117,19 @@ public class ForceInducedShips implements ShipPhysicsListener {
 
     // ----- Force induced ships ----- //
 
-    public static ForceInducedShips getOrCreate(ServerShip ship) {
+    public static ForceInducedShips getOrCreate(LoadedServerShip ship) {
         ForceInducedShips attachment = ship.getAttachment(ForceInducedShips.class);
         if (attachment == null) {
             attachment = new ForceInducedShips();
-            ship.saveAttachment(ForceInducedShips.class, attachment);
+            ship.setAttachment(ForceInducedShips.class, attachment);
         }
         return attachment;
     }
 
     public static ForceInducedShips get(Level level, BlockPos pos) {
         ServerLevel serverLevel = (ServerLevel) level;
-        // Don't ask, I don't know
-        ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(serverLevel, pos);
-        if (ship == null) {
-            ship = VSGameUtilsKt.getShipManagingPos(serverLevel, pos);
-        }
+        LoadedServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(serverLevel, pos);
+
         // Seems counter-intutive at first. But basically, it returns null if it wasn't a ship. Otherwise, it gets the attachment OR creates and then gets it
         return ship != null ? getOrCreate(ship) : null;
     }

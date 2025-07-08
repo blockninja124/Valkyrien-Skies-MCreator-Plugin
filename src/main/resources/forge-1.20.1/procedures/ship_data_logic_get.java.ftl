@@ -1,1 +1,1 @@
-((${input$ship} instanceof ServerShip) ? ForceInducedShips.getOrCreate((ServerShip) ${input$ship}).getBoolData(${input$dataName}) : false)
+((${input$ship} instanceof LoadedServerShip) ? ForceInducedShips.getOrCreate((LoadedServerShip) ${input$ship}).getBoolData(${input$dataName}) : false)

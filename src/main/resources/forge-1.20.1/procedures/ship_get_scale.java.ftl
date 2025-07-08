@@ -1,7 +1,7 @@
 <#-- @formatter:off -->
 (
-    (${input$ship} instanceof ServerShip) ?
-        ((ServerShip) ${input$ship}).getTransform().getShipToWorldScaling().x() :
+    (${input$ship} instanceof LoadedServerShip) ?
+        ((LoadedServerShip) ${input$ship}).getTransform().getShipToWorldScaling().x() :
         0
 )
 <#-- @formatter:on -->
