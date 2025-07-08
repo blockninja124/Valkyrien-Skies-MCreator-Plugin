@@ -1,8 +1,8 @@
 package ${package}.ships;
 
 public final class ForceInducedShips implements ShipPhysicsListener {
-    public Stack<com.mojang.datafixers.util.Pair<BlockPos, ForceData>> nextTickForces = new Stack<>();
-    public Stack<RotData> nextTickRotations = new Stack<>();
+    @JsonIgnore public Stack<com.mojang.datafixers.util.Pair<BlockPos, ForceData>> nextTickForces = new Stack<>();
+    @JsonIgnore public Stack<RotData> nextTickRotations = new Stack<>();
 
     // DON'T access these in applyForces, thread issues will ensue!!
     public HashMap<String, Number> numData = new HashMap<>();
