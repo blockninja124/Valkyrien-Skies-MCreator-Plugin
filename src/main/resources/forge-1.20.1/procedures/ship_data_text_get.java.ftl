@@ -1,1 +1,1 @@
-((${input$ship} instanceof ServerShip) ? ForceInducedShips.getOrCreate((ServerShip) ${input$ship}).getStrData(${input$dataName}) : "")
+((${input$ship} instanceof LoadedServerShip) ? ForceInducedShips.getOrCreate((LoadedServerShip) ${input$ship}).getStrData(${input$dataName}) : "")

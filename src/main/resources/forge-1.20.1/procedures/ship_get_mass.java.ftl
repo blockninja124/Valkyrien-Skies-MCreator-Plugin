@@ -1,1 +1,1 @@
-((${input$ship} instanceof ServerShip) ? ((ServerShip) ${input$ship}).getInertiaData().getMass() : 0)
+((${input$ship} instanceof LoadedServerShip) ? ((LoadedServerShip) ${input$ship}).getInertiaData().getMass() : 0)

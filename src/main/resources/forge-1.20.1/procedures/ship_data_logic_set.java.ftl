@@ -1,5 +1,5 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ForceInducedShips.getOrCreate((ServerShip) ${input$ship}).addBoolData(${input$dataName}, ${input$dataValue});
+    if (${input$ship} instanceof LoadedServerShip) {
+        ForceInducedShips.getOrCreate((LoadedServerShip) ${input$ship}).addBoolData(${input$dataName}, ${input$dataValue});
     }
 }

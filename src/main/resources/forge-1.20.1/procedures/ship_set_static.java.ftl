@@ -1,5 +1,5 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ((ServerShip) ${input$ship}).setStatic(${input$bool});
+    if (${input$ship} instanceof LoadedServerShip) {
+        ((LoadedServerShip) ${input$ship}).setStatic(${input$bool});
     }
 }
