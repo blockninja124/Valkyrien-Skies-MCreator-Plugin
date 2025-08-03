@@ -1,0 +1,8 @@
+{
+  "valkyien_plugin": {
+    "latest": "1.5",
+    "changes": [
+      "Extra files are no longer created when api is disabled"
+    ]
+  }
+}
