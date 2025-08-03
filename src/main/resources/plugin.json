@@ -17,7 +17,8 @@
     "dependencies":  [
       "extra_types",
       "forge_mixins"
-    ]
+    ],
+    "updateJSONURL": "https://raw.githubusercontent.com/blockninja124/Valkyrien-Skies-MCreator-Plugin/master/update.json"
   }
 }
 
