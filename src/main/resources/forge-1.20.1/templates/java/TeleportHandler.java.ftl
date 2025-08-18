@@ -132,4 +132,12 @@ public class TeleportHandler {
         return server.getLevel(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(dimensionString)));
     }
 
+    public static Vector3d toDegrees(Vector3d radianVec) {
+
+        double pitchDeg = Math.toDegrees(radianVec.x);
+        double yawDeg   = Math.toDegrees(radianVec.y);
+        double rollDeg  = Math.toDegrees(radianVec.z);
+
+        return new Vector3d(pitchDeg, yawDeg, rollDeg);
+    }
 }
