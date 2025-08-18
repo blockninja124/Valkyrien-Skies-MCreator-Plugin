@@ -15,8 +15,7 @@
     "description": "Allows some limited use of Valkyrien Skies",
     "author": "blockninja124",
     "dependencies":  [
-      "extra_types",
-      "forge_mixins"
+      "extra_types"
     ],
     "updateJSONURL": "https://raw.githubusercontent.com/blockninja124/Valkyrien-Skies-MCreator-Plugin/master/update.json"
   }

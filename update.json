@@ -1,8 +1,11 @@
 {
   "valkyien_plugin": {
-    "latest": "1.5",
+    "latest": "1.6",
     "changes": [
-      "Extra files are no longer created when api is disabled"
+      "No longer using jank to create class files",
+      "Ability to get ship rotation",
+      "Ability to get and set ship gravity",
+      "Mixin plugin is no longer required - it's now built in"
     ]
   }
 }
