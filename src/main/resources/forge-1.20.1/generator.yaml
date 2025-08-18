@@ -62,6 +62,9 @@ base_templates:
   - template: java/ForceInducedShips.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/ForceInducedShips.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/GravityInducedShips.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/GravityInducedShips.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   - template: java/ForceMode.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/ForceMode.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}

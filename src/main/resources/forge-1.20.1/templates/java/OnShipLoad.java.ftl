@@ -6,6 +6,7 @@ public class OnShipLoad {
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         VSEvents.ShipLoadEvent.Companion.on((shipLoadEvent) -> {
             ForceInducedShips.getOrCreate(shipLoadEvent.getShip());
+            GravityInducedShips.getOrCreate(shipLoadEvent.getShip());
         });
     }
 }
