@@ -1,11 +1,10 @@
 {
   "valkyien_plugin": {
-    "latest": "1.6",
+    "latest": "1.7",
     "changes": [
-      "No longer using jank to create class files",
-      "Ability to get ship rotation",
-      "Ability to get and set ship gravity",
-      "Mixin plugin is no longer required - it's now built in"
+      "Can get ships in a specified area",
+      "NOTE: 2025.2 support has been broken by the forge 1.20.1 plugin updating",
+      "We will provide a new release supporting it properly soon-ish"
     ]
   }
 }
