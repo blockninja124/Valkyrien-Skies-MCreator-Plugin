@@ -8,5 +8,12 @@ public class OnShipLoad {
             ForceInducedShips.getOrCreate(shipLoadEvent.getShip());
             GravityInducedShips.getOrCreate(shipLoadEvent.getShip());
         });
+
+        AttachmentRegistration registration = ValkyrienSkies.api()
+            .newAttachmentRegistrationBuilder(ForceInducedShips.class)
+            .useLegacySerializer()
+            .build();
+
+        ValkyrienSkies.api().registerAttachment(registration);
     }
 }

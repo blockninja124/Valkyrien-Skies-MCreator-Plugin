@@ -102,16 +102,18 @@ public class ValkyrienPlugin extends JavaPlugin {
                 }
             }
 
-            File javaFile = new File(mcreator.getWorkspaceFolder(), "src/main/java/" + workspaceSettings.getModElementsPackage().replace(".", "/") + "/mixins/" + "ServerShipObjectWorldAccessor.java");
+            File javaFile = new File(mcreator.getWorkspaceFolder(), "src/main/java/" + workspaceSettings.getModElementsPackage().replace(".", "/") + "/mixins/" + "LoadedServerShipObjectWorldAccessor.java");
             if (!javaFile.exists()) {
+                /*
                 try {
-                    String formattedCode = JavaTemplateParser.fullyParseTemplate(mcreator, "ServerShipObjectWorldAccessor");
+                    String formattedCode = JavaTemplateParser.fullyParseTemplate(mcreator, "LoadedServerShipObjectWorldAccessor");
                     FileIO.writeStringToFile(formattedCode, javaFile);
 
-                    LOG.info("ServerShipObjectWorldAccessor.java generated successfully at: " + javaFile.getPath());
+                    LOG.info("LoadedServerShipObjectWorldAccessor.java generated successfully at: " + javaFile.getPath());
                 } catch (Exception e) {
-                    LOG.error("Error generating ServerShipObjectWorldAccessor.java!", e);
+                    LOG.error("Error generating LoadedServerShipObjectWorldAccessor.java!", e);
                 }
+                */
             }
         }
     }

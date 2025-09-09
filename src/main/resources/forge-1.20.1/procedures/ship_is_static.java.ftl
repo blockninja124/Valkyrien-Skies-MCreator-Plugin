@@ -1,1 +1,1 @@
-((${input$ship} instanceof ServerShip) ? ((ServerShip) ${input$ship}).isStatic() : false)
+((${input$ship} instanceof LoadedServerShip) ? ((LoadedServerShip) ${input$ship}).isStatic() : false)

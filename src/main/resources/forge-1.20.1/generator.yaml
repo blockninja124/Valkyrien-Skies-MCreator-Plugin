@@ -80,9 +80,6 @@ base_templates:
   - template: java/TeleportHandler.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/TeleportHandler.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
-  - template: java/ServerShipObjectWorldAccessor.java.ftl
-    name: "@SRCROOT/@BASEPACKAGEPATH/mixins/ServerShipObjectWorldAccessor.java"
-    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   # Mixins
   - template: modbase/mixins.json.ftl
     writer: json

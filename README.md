@@ -72,10 +72,6 @@ The plugin custom-generates some Java files into `Source (gradle)/<mod_folder>/s
 - `RotData.java`
 - `TeleportHandler.java`
 
-`/mixin`
-
-- `ServerShipObjectWorldAccessor.java`
-
 **These files will be deleted on workspace re-factor! Make sure to re-load your workspace after this happens so the files can be re-generated!**
 
 If you have these files, but you are failing to build (with an error such as `org.valkyrienskies.<stuff>.Ship not found!`) make sure that the api is enabled in workspace settings!
