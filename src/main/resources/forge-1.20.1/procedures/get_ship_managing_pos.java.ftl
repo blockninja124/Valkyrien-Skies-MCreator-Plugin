@@ -1,1 +1,1 @@
-(VSGameUtilsKt.getLoadedShipManagingPos((Level) world, ${input$pos}))
+((world instanceof ServerLevel) ? (VSGameUtilsKt.getLoadedShipManagingPos((ServerLevel) world, ${input$pos})) : null)

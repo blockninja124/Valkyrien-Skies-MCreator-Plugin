@@ -1,0 +1,52 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "shipA",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "shipB",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "rotA",
+      "check": "Vec3"
+    },
+    {
+      "type": "input_value",
+      "name": "rotB",
+      "check": "Vec3"
+    },
+    {
+      "type": "input_value",
+      "name": "posA",
+      "check": "Vec3"
+    },
+    {
+      "type": "input_value",
+      "name": "posB",
+      "check": "Vec3"
+    }
+  ],
+  "inputsInline": false,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "shipA",
+      "shipB",
+      "rotA",
+      "rotB",
+      "posA",
+      "posB"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

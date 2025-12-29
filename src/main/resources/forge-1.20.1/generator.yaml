@@ -83,6 +83,9 @@ base_templates:
   - template: java/ShipLandingAttachment.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/ShipLandingAttachment.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/JointUtil.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/JointUtil.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   # Mixins
   - template: modbase/mixins.json.ftl
     writer: json
