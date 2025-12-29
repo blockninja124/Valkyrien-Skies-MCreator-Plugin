@@ -1,16 +1,16 @@
 package ${package}.ships;
 
-public class GravityInducedShips implements ShipForcesInducer {
+public final class GravityInducedShips implements ShipPhysicsListener {
 
     private volatile double gravity = 1;
 
     public GravityInducedShips() {}
 
     @Override
-    public void applyForces(@NotNull PhysShip physicShip) {
+    public void physTick(@NotNull PhysShip physicShip, @NotNull PhysLevel physLevel) {
         PhysShipImpl physShip = (PhysShipImpl) physicShip;
 
-        double shipGravity = (1 - this.gravity) * 10 * physShip.get_inertia().getShipMass();
+        double shipGravity = (1 - this.gravity) * 10 * physShip.getMass();
         physShip.applyInvariantForce(new Vector3d(0, shipGravity, 0));
     }
 
@@ -27,7 +27,7 @@ public class GravityInducedShips implements ShipForcesInducer {
         GravityInducedShips attachment = ship.getAttachment(GravityInducedShips.class);
         if (attachment == null) {
             attachment = new GravityInducedShips();
-            ship.saveAttachment(GravityInducedShips.class, attachment);
+            ship.setAttachment(GravityInducedShips.class, attachment);
         }
         return attachment;
     }

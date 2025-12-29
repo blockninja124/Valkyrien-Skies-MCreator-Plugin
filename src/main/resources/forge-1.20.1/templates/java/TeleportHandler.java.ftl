@@ -102,7 +102,7 @@ public class TeleportHandler {
         final LoadedServerShip loadedShip = (LoadedServerShip) ship;
         final Vector3dc pos = loadedShip.getTransform().getPositionInWorld();
         final ShipLandingAttachment landingAttachment = loadedShip.getAttachment(ShipLandingAttachment.class);
-        if (loadedShip.isStatic() && landingAttachment != null && landingAttachment.freezed) {
+        if (loadedShip.isStatic() && landingAttachment != null && landingAttachment.frozen) {
             velocity = landingAttachment.velocity;
             omega = landingAttachment.omega;
         } else {

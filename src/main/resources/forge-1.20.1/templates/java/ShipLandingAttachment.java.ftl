@@ -42,7 +42,7 @@ public final class ShipLandingAttachment {
 	private void setLaunchPositions0(final Map<String, Long> positions) {
 		this.launchPositions.clear();
 		positions.forEach((level, pos) ->
-			this.launchPositions.put(ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(level)), new ChunkPos(pos))
+			this.launchPositions.put(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(level)), new ChunkPos(pos))
 		);
 	}
 
