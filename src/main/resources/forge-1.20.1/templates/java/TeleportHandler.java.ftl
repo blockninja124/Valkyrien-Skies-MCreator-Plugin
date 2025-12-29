@@ -1,143 +1,388 @@
 package ${package}.ships;
 
-// This class is straight up yoinked from starlance, I should probably simplify it at some point
+@Mod.EventBusSubscriber
 public class TeleportHandler {
-    
-    private static final Map<Long, Set<Integer>> shipIdToConstraints = ((${package}.mixins.ServerShipObjectWorldAccessor) VSGameUtilsKt.getShipObjectWorld(ValkyrienSkiesMod.getCurrentServer())).getShipIdToConstraints();
-    private static final Map<Integer, VSConstraint> constraintIdToConstraint = ((${package}.mixins.ServerShipObjectWorldAccessor) VSGameUtilsKt.getShipObjectWorld(ValkyrienSkiesMod.getCurrentServer())).getConstraints();
-    
-    private final Map<Long, Vector3d> shipToPos = new HashMap<>();
-    private final ServerShipWorldCore shipWorld;
+
+    private static final double ENTITY_COLLECT_RANGE = 8;
+    private static final double SHIP_COLLECT_RANGE = 10;
+
+    private static Map<Long, Set<Integer>> SHIP2CONSTRAINTS = Map.of();
+    private static Map<Integer, VSJoint> ID2CONSTRAINT;
+
+    private final Long2ObjectOpenHashMap<TeleportData> ships = new Long2ObjectOpenHashMap<>();
+    private final Map<Entity, Vec3> entityToPos = new HashMap<>();
+    private VsiServerShipWorld shipWorld;
     private double greatestOffset;
-    private final ServerLevel newDim;
-    private final ServerLevel originalDim;
-    private final boolean highestShipPriority;
-    
-    public TeleportHandler(ServerLevel newDim, ServerLevel originalDim, boolean highestShipPriority) {
-        shipWorld = VSGameUtilsKt.getShipObjectWorld(newDim);
-        this.newDim = newDim;
-        this.originalDim = originalDim;
-        this.highestShipPriority = highestShipPriority;
+    private ServerLevel oldLevel;
+    private ServerLevel newLevel;
+    private final boolean isReturning;
+
+    public TeleportHandler(final ServerLevel oldLevel, final ServerLevel newLevel, final boolean isReturning) {
+        this.shipWorld = newLevel == null ? null : VSGameUtilsKt.getShipObjectWorld(newLevel);
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
+        // Look for the lowest ship when escaping, in order to not collide with the planet.
+        // Look for the highest ship when reentering, in order to not collide with the atmosphere.
+        this.isReturning = isReturning;
     }
-    
-    public void handleTeleport(Ship ship, Vector3d newPos) {
-        // The user has done a woopsie, transform to world
-        if (VSGameUtilsKt.isBlockInShipyard(this.newDim, newPos.x, newPos.y, newPos.z)) {
-            // If the position we teleport to is in the shipyard, we stack overflow
-            Ship posShip = VSGameUtilsKt.getShipManagingPos(this.newDim, newPos);
-            if (posShip != null) {
-                newPos = posShip.getTransform().getShipToWorld().transformPosition(newPos);
+
+    @SubscribeEvent
+    public static void onServerStart(final ServerStartedEvent event) {
+    }
+
+    public static void onPhysTick(PhysTickEvent event) {
+        VsiPhysLevel level = (VsiPhysLevel) event.getWorld();
+        if (SHIP2CONSTRAINTS.isEmpty()) {
+            SHIP2CONSTRAINTS = level.getJointsByShipIds();
+            ID2CONSTRAINT = level.getAllJoints();
+        }
+    }
+
+    public void reset(final ServerLevel oldLevel, final ServerLevel newLevel) {
+        this.shipWorld = newLevel == null ? null : VSGameUtilsKt.getShipObjectWorld(newLevel);
+        this.oldLevel = oldLevel;
+        this.newLevel = newLevel;
+        this.ships.clear();
+        this.entityToPos.clear();
+    }
+
+    public boolean hasShip(final ServerShip ship) {
+        return this.ships.containsKey(ship.getId());
+    }
+
+    public void addShip(final ServerShip ship, final Vector3dc newPos, final Quaterniondc rotation) {
+        this.addShipWithVelocity(ship, newPos, rotation, null, null);
+    }
+
+    public void addShipWithVelocity(final ServerShip ship, final Vector3dc newPos, final Quaterniondc rotation, final Vector3dc velocity, final Vector3dc omega) {
+        final long shipId = ship.getId();
+        if (this.ships.containsKey(shipId)) {
+            return;
+        }
+        this.greatestOffset = 0;
+        final List<ServerShip> collected = new ArrayList<>();
+        final Vector3dc origin = ship.getTransform().getPositionInWorld();
+        this.collectShipAndConnectedWithVelocity(shipId, origin, newPos, rotation, velocity, omega, collected);
+        this.collectNearbyShips(collected, origin, newPos, rotation);
+        this.collectNearbyEntities(collected, origin, newPos, rotation);
+        this.finalizeCollect(collected, rotation);
+    }
+
+    public List<LoadedServerShip> getPendingShips() {
+        final List<LoadedServerShip> ships = new ArrayList<>(this.ships.size());
+        for (long id : this.ships.keySet()) {
+            final LoadedServerShip ship = this.shipWorld.getLoadedShips().getById(id);
+            if (ship != null) {
+                ships.add(ship);
             }
         }
-        collectShips(ship, newPos);
-        handleTeleport();
+        return ships;
     }
 
-    
-    
-    private void collectConnected(Long currentPhysObject, Vector3dc origin, Vector3d newPos) {
-        if (currentPhysObject == null) return;
-            if (shipToPos.containsKey(currentPhysObject)) return;
+    private void collectShipAndConnected(final long shipId, final Vector3dc origin, final Vector3dc newPos, final Quaterniondc rotation, final List<ServerShip> collected) {
+        this.collectShipAndConnectedWithVelocity(shipId, origin, newPos, rotation, null, null, collected);
+    }
 
-            Set<Integer> constraints = shipIdToConstraints.get(currentPhysObject);
-            Vector3dc pos = transformFromId(currentPhysObject, shipWorld).getPositionInWorld();
+    private void collectShipAndConnectedWithVelocity(
+            final long shipId,
+            final Vector3dc origin,
+            final Vector3dc newPos,
+            final Quaterniondc rotation,
+            Vector3dc velocity,
+            Vector3dc omega,
+            final List<ServerShip> collected
+    ) {
+        if (this.ships.containsKey(shipId)) {
+            return;
+        }
+        final ServerShip ship = this.getShip(shipId);
+        if (!(ship instanceof LoadedServerShip)) {
+            return;
+        }
+        final LoadedServerShip loadedShip = (LoadedServerShip) ship;
+        final Vector3dc pos = loadedShip.getTransform().getPositionInWorld();
+        final ShipLandingAttachment landingAttachment = loadedShip.getAttachment(ShipLandingAttachment.class);
+        if (loadedShip.isStatic() && landingAttachment != null && landingAttachment.freezed) {
+            velocity = landingAttachment.velocity;
+            omega = landingAttachment.omega;
+        } else {
+            if (velocity == null) {
+                velocity = new Vector3d(loadedShip.getVelocity());
+            }
+            if (omega == null) {
+                omega = new Vector3d(loadedShip.getAngularVelocity());
+            }
+        }
+        collected.add(loadedShip);
 
-            double offset = pos.get(1) - origin.get(1);
+        final Vector3d relPos = pos.sub(origin, new Vector3d());
+        final Quaterniond newRotataion = new Quaterniond(loadedShip.getTransform().getShipToWorldRotation());
 
-            offset *= highestShipPriority ? 1 : -1;
-            if (offset > greatestOffset) greatestOffset = offset;
+        if (!this.isReturning) {
+            final double offset = relPos.y;
+            if (offset < this.greatestOffset) {
+                this.greatestOffset = offset;
+            }
+        }
 
-            shipToPos.put(currentPhysObject, pos.sub(origin, new Vector3d()).add(newPos, new Vector3d()));
+        rotation.transform(relPos);
+        velocity = rotation.transform(velocity, new Vector3d());
+        newRotataion.mul(rotation).normalize();
+
+        if (this.isReturning) {
+            final double offset = relPos.y;
+            if (offset > this.greatestOffset) {
+                this.greatestOffset = offset;
+            }
+        }
+
+        relPos.add(newPos);
+        final Vector3d velocity0 = new Vector3d(velocity);
+        final Vector3d omega0 = new Vector3d(omega);
+
+        // When entering space (not returning), scale velocity down!!
+        if (!this.isReturning) {
+            velocity0.mul(0.0625);
+        }
+
+        MinecraftForge.EVENT_BUS.post(this.createPreShipTravelEvent(
+                loadedShip, oldLevel.dimension(), newLevel.dimension(), relPos, newRotataion, velocity0, omega0
+        ));
+
+        this.ships.put(
+                shipId,
+                new TeleportData(
+                        relPos,
+                        newRotataion,
+                        velocity0,
+                        omega0
+                )
+        );
+
+        try {
+            final Set<Integer> constraints = SHIP2CONSTRAINTS.get(shipId);
             if (constraints != null) {
-                constraints.iterator().forEachRemaining(id -> {
-                VSConstraint constraint = constraintIdToConstraint.get(id);
-                collectConnected(constraint.getShipId0(), origin, newPos);
-                collectConnected(constraint.getShipId1(), origin, newPos);
+                constraints.stream().map(ID2CONSTRAINT::get).forEach((constraint) -> {
+                    this.collectShipAndConnected(constraint.getShipId0(), origin, newPos, rotation, collected);
+                    this.collectShipAndConnected(constraint.getShipId1(), origin, newPos, rotation, collected);
+                });
+            }
+        } catch (ConcurrentModificationException e) {
+            //fuck.
+        }
+    }
+
+    private void collectNearbyShips(final List<ServerShip> collected, final Vector3dc origin, final Vector3dc newPos, final Quaterniondc rotation) {
+        final QueryableShipData<LoadedServerShip> loadedShips = this.shipWorld.getLoadedShips();
+        final Vector3d offset = newPos.sub(origin, new Vector3d());
+        // Note: collected list will grow during the loop
+        for (int i = 0; i < collected.size(); i++) {
+            final AABBdc shipBox = collected.get(i).getWorldAABB();
+            final AABBd box = new AABBd(
+                    shipBox.minX() - SHIP_COLLECT_RANGE, shipBox.minY() - SHIP_COLLECT_RANGE, shipBox.minZ() - SHIP_COLLECT_RANGE,
+                    shipBox.maxX() + SHIP_COLLECT_RANGE, shipBox.maxY() + SHIP_COLLECT_RANGE, shipBox.maxZ() + SHIP_COLLECT_RANGE);
+            for (final ServerShip ship : loadedShips.getIntersecting(box)) {
+                this.collectShipAndConnected(ship.getId(), origin, newPos, rotation, collected);
+            }
+        }
+    }
+
+    private void collectNearbyEntities(final List<ServerShip> collected, final Vector3dc origin, final Vector3dc newPos, final Quaterniondc rotation) {
+        for (final ServerShip ship : collected) {
+            this.collectEntities(ship, origin, newPos, rotation);
+        }
+    }
+
+    private void finalizeCollect(final List<ServerShip> collected, final Quaterniondc rotation) {
+        final Vector3d offset = new Vector3d(0, -this.greatestOffset, 0);
+        if (!this.isReturning) {
+            rotation.transform(offset);
+        }
+        for (final ServerShip ship : collected) {
+            final long id = ship.getId();
+            final Vector3d newPos = this.ships.get(id).newPos();
+            newPos.add(offset);
+        }
+    }
+
+    public void finalizeTeleport() {
+        final int size = this.ships.size();
+        if (size == 0) {
+            return;
+        }
+        this.ships.forEach(this::handleShipTeleport);
+        this.ships.clear();
+        if (size >= 256) {
+            this.ships.trim(32);
+        }
+        this.teleportEntities();
+    }
+
+    private void collectEntities(final ServerShip ship, final Vector3dc origin, final Vector3dc newPos, final Quaterniondc rotation) {
+        // Entities in range
+        final AABBd shipBoxd = new AABBd(ship.getWorldAABB());
+        final AABBic shipBoxi = ship.getShipAABB();
+        if (shipBoxi != null) {
+            final AABBd shipYardBox = new AABBd(
+                    shipBoxi.minX(), shipBoxi.minY(), shipBoxi.minZ(),
+                    shipBoxi.maxX(), shipBoxi.maxY(), shipBoxi.maxZ()
+            );
+            for (final Entity entity : this.oldLevel.getEntities(
+                    ((Entity)(null)),
+                    new AABB(
+                            shipYardBox.minX - 16 * 4, shipYardBox.minY - 16 * 4, shipYardBox.minZ - 16 * 4,
+                            shipYardBox.maxX + 16 * 4, shipYardBox.maxY + 16 * 4, shipYardBox.maxZ + 16 * 4
+                    ),
+                    (entity) -> !this.entityToPos.containsKey(entity)
+            )) {
+                this.collectEntity(entity, origin, newPos, rotation);
+            }
+            shipBoxd.union(shipYardBox.transform(ship.getPrevTickTransform().getShipToWorld()));
+        }
+        double scaledEntityCollectRange = ENTITY_COLLECT_RANGE;
+
+        final AABB inflatedBox = new AABB(
+                shipBoxd.minX - scaledEntityCollectRange, shipBoxd.minY - scaledEntityCollectRange, shipBoxd.minZ - scaledEntityCollectRange,
+                shipBoxd.maxX + scaledEntityCollectRange, shipBoxd.maxY + scaledEntityCollectRange, shipBoxd.maxZ + scaledEntityCollectRange
+        );
+        for (final Entity entity : this.oldLevel.getEntities(
+                ((Entity)(null)),
+                inflatedBox,
+                (entity) -> !this.entityToPos.containsKey(entity)
+        )) {
+            this.collectEntity(entity, origin, newPos, rotation);
+        }
+    }
+
+    private void collectEntity(final Entity entity, final Vector3dc origin, final Vector3dc newPos, final Quaterniondc rotation) {
+        final Entity root = entity.getRootVehicle();
+        if (this.entityToPos.containsKey(root)) {
+            return;
+        }
+        Vec3 pos = root.position();
+        if (!VSGameUtilsKt.isBlockInShipyard(this.oldLevel, pos)) {
+            final Vector3d relPos = new Vector3d(pos.x, pos.y, pos.z).sub(origin);
+            rotation.transform(relPos);
+            relPos.add(newPos);
+            pos = new Vec3(relPos.x, relPos.y, relPos.z);
+        }
+        this.entityToPos.put(root, pos);
+    }
+
+    private void teleportEntities() {
+        this.entityToPos.keySet().forEach((entity) -> {
+            if (entity instanceof ISpecialTeleportLogicEntity specialEntity) {
+                specialEntity.starlance$beforeTeleport();
+            }
+        });
+        this.entityToPos.forEach((entity, newPos) -> {
+            teleportToWithPassengers(entity, this.newLevel, newPos);
+        });
+        this.entityToPos.clear();
+    }
+
+    private void handleShipTeleport(final long id, final TeleportData data) {
+        final String vsDimName = VSGameUtilsKt.getDimensionId(this.newLevel);
+        final Vector3dc newPos = data.newPos();
+        final Quaterniondc rotation = data.rotation();
+        final Vector3dc velocity = data.velocity();
+        final Vector3dc omega = data.omega();
+
+        final LoadedServerShip ship = this.shipWorld.getLoadedShips().getById(id);
+        if (ship == null) {
+//			final PhysicsEntityServer physEntity = (this.shipWorld).getLoadedShips().getById(id);
+//			if (physEntity == null) {
+//				LOGGER.warn("[genesis]: Failed to teleport physics object with id " + id + "! It's neither a Ship nor a Physics Entity!");
+//				return;
+//			}
+//			LOGGER.info("[genesis]: Teleporting physics entity {} to {} {} (scale: {})", id, vsDimName, newPos, shipScale);
+//			final ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos, physEntity.getShipTransform().getShipToWorldRotation(), physEntity.getLinearVelocity(), physEntity.getAngularVelocity(), vsDimName, shipScale);
+//			this.shipWorld.teleportPhysicsEntity(physEntity, teleportData);
+            return;
+        }
+
+        ship.setStatic(false);
+        final ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos, rotation, velocity, omega, vsDimName, 1d, null);
+        this.shipWorld.teleportShip(ship, teleportData);
+        if (velocity.lengthSquared() != 0 || omega.lengthSquared() != 0) {
+            ship.setTransformProvider(new ServerShipTransformProvider() {
+                @Override
+                public NextTransformAndVelocityData provideNextTransformAndVelocity(final ShipTransform prevTransform, final ShipTransform transform) {
+                    final LoadedServerShip ship2 = TeleportHandler.this.shipWorld.getLoadedShips().getById(id);
+                    if (!prevTransform.getPositionInWorld().equals(transform.getPositionInWorld()) || !prevTransform.getShipToWorldRotation().equals(transform.getShipToWorldRotation())) {
+                        ship2.setTransformProvider(null);
+                        return null;
+                    }
+                    if (ship2.getVelocity().lengthSquared() == 0 && ship2.getOmega().lengthSquared() == 0) {
+                        return new NextTransformAndVelocityData(transform, velocity, omega);
+                    }
+                    return null;
+                }
             });
         }
     }
-    
-    private void collectShips(Ship ship, Vector3d newPos) {
-        Vector3dc origin = ship.getTransform().getPositionInWorld();
-        collectConnected(ship.getId(), origin, newPos);
-        collectNearby(origin, newPos);
-    }
-    
-    private void collectNearby(Vector3dc origin, Vector3d newPos) {
-        Map<Long, Vector3d> newShipToPos = new HashMap<>();
 
-        shipToPos.keySet().forEach(id -> {
-
-            if (shipToPos.containsKey(id)) return;
-
-            QueryableShipData<LoadedServerShip> loadedShips = shipWorld.getLoadedShips();
-            Ship ship = loadedShips.getById(id);
-
-            if (ship == null) return;
-
-            loadedShips.getIntersecting(VectorConversionsMCKt.toJOML(VectorConversionsMCKt.toMinecraft(ship.getWorldAABB()).inflate(10))).forEach(
-                intersecting -> newShipToPos.put(intersecting.getId(), intersecting.getTransform().getPositionInWorld().sub(origin, new Vector3d()).add(newPos, new Vector3d()))
-            );
-        });
-        shipToPos.putAll(newShipToPos);
-    }
-    
-    private void handleTeleport() {
-        greatestOffset *= highestShipPriority ? -1 : 1;
-        shipToPos.forEach((id, newPos) -> {
-            dismountEntities(id);
-            handleShipTeleport(id, newPos);
-        });
-    }
-    
-    private void dismountEntities(Long id) {
-        ServerShip ship = shipWorld.getLoadedShips().getById(id);
-        if (ship == null) return;
-        AABB inflatedAABB = VectorConversionsMCKt.toMinecraft(ship.getWorldAABB()).inflate(20);
-        originalDim.getEntities(null, inflatedAABB).forEach((entity) -> {
-            entity.dismountTo(entity.getX(), entity.getY(), entity.getZ());
-        });
-    }
-    
-    private void handleShipTeleport(Long id, Vector3d newPos) {
-        String vsDimName = ((DimensionIdProvider) newDim).getDimensionId();
-
-        ServerShip ship = shipWorld.getLoadedShips().getById(id);
-        if (ship == null) {
-            PhysicsEntityServer physEntity = ((ShipObjectServerWorld) shipWorld).getLoadedPhysicsEntities().get(id);
-            if (physEntity == null) {
-                return;
+    private static <T extends Entity> T teleportToWithPassengers(final T entity, final ServerLevel newLevel, final Vec3 newPos) {
+        final Vec3 oldPos = entity.position();
+        final List<Entity> passengers = new ArrayList<>(entity.getPassengers());
+        passengers.forEach((e) -> {
+            if (e instanceof ISpecialTeleportLogicEntity specialEntity) {
+                specialEntity.starlance$beforeTeleport();
             }
-            ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos.add(0,greatestOffset,0), physEntity.getShipTransform().getShipToWorldRotation(), new Vector3d(), new Vector3d(), vsDimName, null);
-            shipWorld.teleportPhysicsEntity(physEntity, teleportData);
+        });
+        final T newEntity;
+        if (entity instanceof ServerPlayer player) {
+            player.teleportTo(newLevel, newPos.x, newPos.y, newPos.z, player.getYRot(), player.getXRot());
+            newEntity = entity;
+        } else {
+            newEntity = (T) entity.getType().create(newLevel);
+            if (newEntity == null) {
+                if (entity instanceof ISpecialTeleportLogicEntity specialEntity) {
+                    specialEntity.starlance$afterTeleport(null);
+                }
+                return null;
+            }
+            entity.ejectPassengers();
+            newEntity.restoreFrom(entity);
+            newEntity.moveTo(newPos.x, newPos.y, newPos.z, newEntity.getYRot(), newEntity.getXRot());
+            newEntity.setYHeadRot(entity.getYHeadRot());
+            newEntity.setYBodyRot(entity.getVisualRotationYInDegrees());
+            newLevel.addDuringTeleport(newEntity);
+            entity.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
         }
-        ShipTeleportData teleportData = new ShipTeleportDataImpl(newPos.add(0,greatestOffset,0), ship.getTransform().getShipToWorldRotation(), new Vector3d(), new Vector3d(), vsDimName, null);
-        shipWorld.teleportShip(ship, teleportData);
-    }
-    
-    private static ShipTransform transformFromId(Long id, ServerShipWorldCore shipWorld) {
-        Ship ship = shipWorld.getAllShips().getById(id);
-        if (ship == null) {
-            PhysicsEntityServer physicsEntity = ((ShipObjectServerWorld)shipWorld).getLoadedPhysicsEntities().get(id);
-            if (physicsEntity == null) return new ShipTransformImpl(new Vector3d(), new Vector3d(), new Quaterniond(), new Vector3d());
-            return physicsEntity.getShipTransform();
+        for (final Entity p : passengers) {
+            final Entity newPassenger = teleportToWithPassengers(p, newLevel, p.position().subtract(oldPos).add(newPos));
+            if (newPassenger != null) {
+                newPassenger.startRiding(newEntity, true);
+            }
         }
-        return ship.getTransform();
+        if (newEntity instanceof ISpecialTeleportLogicEntity specialEntity) {
+            specialEntity.starlance$afterTeleport((ISpecialTeleportLogicEntity)(entity));
+        }
+        return newEntity;
     }
 
-    public static ServerLevel dimToLevel(String dimensionString) {
-        MinecraftServer server = ValkyrienSkiesMod.getCurrentServer();
-        if (server == null) return null;
-
-        return server.getLevel(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(dimensionString)));
+    private ServerShip getShip(final long shipId) {
+        final ServerShip ship = this.shipWorld.getLoadedShips().getById(shipId);
+        if (ship != null) {
+            return ship;
+        }
+        return this.shipWorld.getAllShips().getById(shipId);
     }
 
-    public static Vector3d toDegrees(Vector3d radianVec) {
-
-        double pitchDeg = Math.toDegrees(radianVec.x);
-        double yawDeg   = Math.toDegrees(radianVec.y);
-        double rollDeg  = Math.toDegrees(radianVec.z);
-
-        return new Vector3d(pitchDeg, yawDeg, rollDeg);
+    private PreShipTravelEvent createPreShipTravelEvent(
+            final ServerShip ship,
+            final ResourceKey<Level> oldLevel,
+            final ResourceKey<Level> newLevel,
+            final Vector3dc position,
+            final Quaterniondc rotation,
+            final Vector3d velocity,
+            final Vector3d omega
+    ) {
+        return this.isReturning
+                ? new PreShipTravelEvent.SpaceToPlanet(ship, oldLevel, newLevel, position, rotation, velocity, omega)
+                : new PreShipTravelEvent.PlanetToSpace(ship, oldLevel, newLevel, position, rotation, velocity, omega);
     }
+
+    private record TeleportData(Vector3d newPos, Quaterniond rotation, Vector3dc velocity, Vector3dc omega) {}
 }
