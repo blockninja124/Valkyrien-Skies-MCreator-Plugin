@@ -6,6 +6,7 @@ public class OnShipLoad {
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         ValkyrienSkies.api().registerAttachment(ForceInducedShips.class);
         ValkyrienSkies.api().registerAttachment(GravityInducedShips.class);
+        ValkyrienSkies.api().registerAttachment(ShipLandingAttachment.class);
 
         VSEvents.ShipLoadEvent.Companion.on((shipLoadEvent) -> {
             ForceInducedShips.getOrCreate(shipLoadEvent.getShip());

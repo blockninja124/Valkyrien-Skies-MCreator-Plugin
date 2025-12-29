@@ -145,10 +145,6 @@ public class TeleportHandler {
             velocity0.mul(0.0625);
         }
 
-        MinecraftForge.EVENT_BUS.post(this.createPreShipTravelEvent(
-                loadedShip, oldLevel.dimension(), newLevel.dimension(), relPos, newRotataion, velocity0, omega0
-        ));
-
         this.ships.put(
                 shipId,
                 new TeleportData(
@@ -270,11 +266,6 @@ public class TeleportHandler {
     }
 
     private void teleportEntities() {
-        this.entityToPos.keySet().forEach((entity) -> {
-            if (entity instanceof ISpecialTeleportLogicEntity specialEntity) {
-                specialEntity.starlance$beforeTeleport();
-            }
-        });
         this.entityToPos.forEach((entity, newPos) -> {
             teleportToWithPassengers(entity, this.newLevel, newPos);
         });
@@ -325,11 +316,6 @@ public class TeleportHandler {
     private static <T extends Entity> T teleportToWithPassengers(final T entity, final ServerLevel newLevel, final Vec3 newPos) {
         final Vec3 oldPos = entity.position();
         final List<Entity> passengers = new ArrayList<>(entity.getPassengers());
-        passengers.forEach((e) -> {
-            if (e instanceof ISpecialTeleportLogicEntity specialEntity) {
-                specialEntity.starlance$beforeTeleport();
-            }
-        });
         final T newEntity;
         if (entity instanceof ServerPlayer player) {
             player.teleportTo(newLevel, newPos.x, newPos.y, newPos.z, player.getYRot(), player.getXRot());
@@ -337,9 +323,6 @@ public class TeleportHandler {
         } else {
             newEntity = (T) entity.getType().create(newLevel);
             if (newEntity == null) {
-                if (entity instanceof ISpecialTeleportLogicEntity specialEntity) {
-                    specialEntity.starlance$afterTeleport(null);
-                }
                 return null;
             }
             entity.ejectPassengers();
@@ -356,9 +339,6 @@ public class TeleportHandler {
                 newPassenger.startRiding(newEntity, true);
             }
         }
-        if (newEntity instanceof ISpecialTeleportLogicEntity specialEntity) {
-            specialEntity.starlance$afterTeleport((ISpecialTeleportLogicEntity)(entity));
-        }
         return newEntity;
     }
 
@@ -368,20 +348,6 @@ public class TeleportHandler {
             return ship;
         }
         return this.shipWorld.getAllShips().getById(shipId);
-    }
-
-    private PreShipTravelEvent createPreShipTravelEvent(
-            final ServerShip ship,
-            final ResourceKey<Level> oldLevel,
-            final ResourceKey<Level> newLevel,
-            final Vector3dc position,
-            final Quaterniondc rotation,
-            final Vector3d velocity,
-            final Vector3d omega
-    ) {
-        return this.isReturning
-                ? new PreShipTravelEvent.SpaceToPlanet(ship, oldLevel, newLevel, position, rotation, velocity, omega)
-                : new PreShipTravelEvent.PlanetToSpace(ship, oldLevel, newLevel, position, rotation, velocity, omega);
     }
 
     private record TeleportData(Vector3d newPos, Quaterniond rotation, Vector3dc velocity, Vector3dc omega) {}
