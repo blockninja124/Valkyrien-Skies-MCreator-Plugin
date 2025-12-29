@@ -1,1 +1,1 @@
-(VSGameUtilsKt.getShipManagingPos((Level) world, ${input$pos}))
+(VSGameUtilsKt.getLoadedShipManagingPos((Level) world, ${input$pos}))
