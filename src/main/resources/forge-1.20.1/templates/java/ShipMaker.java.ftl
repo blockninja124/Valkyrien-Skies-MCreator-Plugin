@@ -22,9 +22,13 @@ public class ShipMaker {
                 var newShipPosInShipyard = VectorConversionsMCKt.toJOMLD(pos).add(0.5, 0.5, 0.5);
                 var newShipRotation = parentShip.getTransform().getShipToWorldRotation();
 
-                var shipTransform =
-                new ShipTransformImpl(newShipPosInWorld, newShipPosInShipyard, newShipRotation, new Vector3d(scale));
-                ((org.valkyrienskies.core.impl.game.ships.ShipDataCommon) serverShip).setTransform(shipTransform);
+                var newTransform = ValkyrienSkiesMod.getVsCore().newBodyTransform(
+                    newShipPosInWorld,
+                    newShipRotation,
+                    new Vector3d(scale),
+                    newShipPosInShipyard
+                );
+                ((VsiServerShip) serverShip).unsafeSetTransform(newTransform);
             }
 
             return serverShip;
