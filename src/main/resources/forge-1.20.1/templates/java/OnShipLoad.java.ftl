@@ -4,6 +4,9 @@ package ${package}.ships;
 public class OnShipLoad {
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
+        ValkyrienSkies.api().registerAttachment(ForceInducedShips.class);
+        ValkyrienSkies.api().registerAttachment(GravityInducedShips.class);
+
         VSEvents.ShipLoadEvent.Companion.on((shipLoadEvent) -> {
             ForceInducedShips.getOrCreate(shipLoadEvent.getShip());
             GravityInducedShips.getOrCreate(shipLoadEvent.getShip());
