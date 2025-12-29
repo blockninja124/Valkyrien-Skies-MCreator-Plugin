@@ -23,7 +23,7 @@ public class GravityInducedShips implements ShipForcesInducer {
     }
 
 
-    public static GravityInducedShips getOrCreate(ServerShip ship) {
+    public static GravityInducedShips getOrCreate(LoadedServerShip ship) {
         GravityInducedShips attachment = ship.getAttachment(GravityInducedShips.class);
         if (attachment == null) {
             attachment = new GravityInducedShips();
@@ -33,9 +33,11 @@ public class GravityInducedShips implements ShipForcesInducer {
     }
 
     public static GravityInducedShips get(Level level, BlockPos pos) {
-        ServerLevel serverLevel = (ServerLevel) level;
-        ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(serverLevel, pos);
+        if (level instanceof ServerLevel serverLevel) {
+            LoadedServerShip ship = VSGameUtilsKt.getLoadedShipManagingPos(serverLevel, pos);
 
-        return ship != null ? getOrCreate(ship) : null;
+            return ship != null ? getOrCreate(ship) : null;
+        }
+        return null;
     }
 }

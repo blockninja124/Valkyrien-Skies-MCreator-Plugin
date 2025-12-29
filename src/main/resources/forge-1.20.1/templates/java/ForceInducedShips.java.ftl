@@ -117,7 +117,7 @@ public class ForceInducedShips implements ShipForcesInducer {
 
     // ----- Force induced ships ----- //
 
-    public static ForceInducedShips getOrCreate(ServerShip ship) {
+    public static ForceInducedShips getOrCreate(LoadedServerShip ship) {
         ForceInducedShips attachment = ship.getAttachment(ForceInducedShips.class);
         if (attachment == null) {
             attachment = new ForceInducedShips();
@@ -127,13 +127,10 @@ public class ForceInducedShips implements ShipForcesInducer {
     }
 
     public static ForceInducedShips get(Level level, BlockPos pos) {
-        ServerLevel serverLevel = (ServerLevel) level;
-        // Don't ask, I don't know
-        ServerShip ship = VSGameUtilsKt.getShipObjectManagingPos(serverLevel, pos);
-        if (ship == null) {
-            ship = VSGameUtilsKt.getShipManagingPos(serverLevel, pos);
+        if (level instanceof ServerLevel serverLevel) {
+            LoadedServerShip ship = VSGameUtilsKt.getLoadedShipManagingPos(serverLevel, pos);
+            return ship != null ? getOrCreate(ship) : null;
         }
-        // Seems counter-intutive at first. But basically, it returns null if it wasn't a ship. Otherwise, it gets the attachment OR creates and then gets it
-        return ship != null ? getOrCreate(ship) : null;
+        return null;
     }
 }

@@ -1,1 +1,1 @@
-((${input$ship} instanceof ServerShip) ? GravityInducedShips.getOrCreate((ServerShip) ${input$ship}).getGravity().doubleValue() : 0.0D)
+((${input$ship} instanceof LoadedServerShip) ? GravityInducedShips.getOrCreate((LoadedServerShip) ${input$ship}).getGravity().doubleValue() : 0.0D)

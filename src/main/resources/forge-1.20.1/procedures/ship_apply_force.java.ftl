@@ -1,6 +1,6 @@
 {
-    if (${input$ship} instanceof ServerShip) {
-        ForceInducedShips forceInducer = ForceInducedShips.getOrCreate((ServerShip) ${input$ship});
+    if (${input$ship} instanceof LoadedServerShip) {
+        ForceInducedShips forceInducer = ForceInducedShips.getOrCreate((LoadedServerShip) ${input$ship});
 
         ForceData data = new ForceData(VectorConversionsMCKt.toJOML(${input$vec}), ${input$strength}, ForceMode.GLOBAL, ForceDirectionMode.${field$dirmode});
 
