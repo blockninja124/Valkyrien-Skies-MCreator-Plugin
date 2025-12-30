@@ -1,0 +1,27 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "jointid",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "output": "VSJoint",
+  "colour": "#e3a010",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "jointid"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}
