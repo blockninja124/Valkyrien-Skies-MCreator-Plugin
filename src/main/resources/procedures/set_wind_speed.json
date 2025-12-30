@@ -1,0 +1,28 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    },
+    {
+      "type": "input_value",
+      "name": "speed",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "nextStatement": null,
+  "previousStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "inputs": [
+      "ship",
+      "speed"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

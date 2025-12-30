@@ -1,0 +1,1 @@
+((world instanceof ServerLevel sl) ? VSGameUtilsKt.getShipObjectWorld(sl).getAerodynamicUtils().getAir${field$stat}ForY(${input$height}, VSGameUtilsKt.getDimensionId(sl)) : -1)

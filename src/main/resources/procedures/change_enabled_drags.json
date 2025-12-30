@@ -1,0 +1,43 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "action",
+      "options": [
+        [ "Enabled", "enable" ],
+        [ "Disabled", "disable" ]
+      ]
+    },
+    {
+      "type": "field_dropdown",
+      "name": "stat",
+      "options": [
+        [ "Drag", "Drag" ],
+        [ "Lift", "Lift" ],
+        [ "Rotational Drag", "RotDrag"]
+      ]
+    }
+  ],
+  "inputsInline": true,
+  "nextStatement": null,
+  "previousStatement": null,
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "inputs": [
+      "ship"
+    ],
+    "fields": [
+      "action",
+      "stat"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

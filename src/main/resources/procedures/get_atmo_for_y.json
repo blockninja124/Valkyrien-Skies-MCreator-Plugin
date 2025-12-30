@@ -1,0 +1,39 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "height",
+      "check": "Number"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "stat",
+      "options": [
+        [ "Pressure (Pa)", "Pressure" ],
+        [ "Density (kg/m^3)", "Density" ],
+        [ "Temperature (K)", "Temperature"]
+      ]
+    }
+  ],
+  "inputsInline": true,
+  "output": "Number",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "height"
+    ],
+    "fields": [
+      "stat"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

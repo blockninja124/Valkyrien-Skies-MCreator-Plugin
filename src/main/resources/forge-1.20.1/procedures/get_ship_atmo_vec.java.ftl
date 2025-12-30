@@ -1,0 +1,1 @@
+((${input$ship} instanceof VsiLoadedServerShip vsiShip) ? VectorConversionsMCKt.toMinecraft(vsiShip.getDragController().get${input$stat}Force()) : new Vec3(0, 0, 0))

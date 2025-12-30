@@ -1,0 +1,32 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "ship",
+      "check": "Ship"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "stat",
+      "options": [
+        [ "Drag", "Drag" ],
+        [ "Lift", "Lift" ]
+      ]
+    }
+  ],
+  "inputsInline": true,
+  "output": "Vec3",
+  "colour": "#cca421",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "ship"
+    ],
+    "fields": [
+      "stat"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}
