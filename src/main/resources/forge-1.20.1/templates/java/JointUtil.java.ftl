@@ -2,8 +2,7 @@ package ${package}.ships;
 
 public class JointUtil {
 
-    public static void makeFixedJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, Consumer<Integer> idCallback) {
-        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA("minecraft:dimension:minecraft:overworld");
+    public static VSJoint makeFixedJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB) {
 
         // Sussy
         Long bodyId1 = shipA != null ? shipA.getId() : null;
@@ -22,9 +21,19 @@ public class JointUtil {
                 rotationBQuat
         );
 
-        VSFixedJoint joint = new VSFixedJoint(bodyId1, poseA, bodyId2, poseB, null, 1.0E-10);
+        return new VSFixedJoint(bodyId1, poseA, bodyId2, poseB, null, 1.0E-10);
+    }
+
+    public static void addJoint(Level level, VSJoint joint, Consumer<Integer> idCallback) {
+        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
         gtpa.addJoint(joint, 0, idCallback);
     }
+
+    public static void removeJointById(Level level, int id) {
+        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
+        gtpa.removeJoint(id);
+    }
+
 
     // ChatGPT slop, no idea if it works
     private static Quaterniondc eulerXYZToQuaternion(double x, double y, double z) {

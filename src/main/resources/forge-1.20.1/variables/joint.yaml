@@ -1,0 +1,10 @@
+defaultvalue: null
+scopes:
+  local:
+    init: VSJoint ${var.getName()} = ${var.getType().getDefaultValue(generator.getWorkspace())};
+    get: ${name}
+    set: ${name} = ${value};
+  global_session:
+    init: public static VSJoint ${var.getName()} = ${var.getValue()};
+    get: ${JavaModName}Variables.${name}
+    set: ${JavaModName}Variables.${name} = ${value};

@@ -1,0 +1,28 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "jointid",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "#e3a010",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "inputs": [
+      "jointid"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}
