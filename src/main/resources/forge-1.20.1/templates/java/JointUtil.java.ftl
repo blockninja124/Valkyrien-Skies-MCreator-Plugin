@@ -57,13 +57,17 @@ public class JointUtil {
         gtpa.removeJoint(id);
     }
 
-    public static VSJoint getJointById(Level level, int id) {
+    public static @Nullable VSJoint getJointById(Level level, int id) {
         GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
-        gtpa.removeJoint(id);
-        return null;
+        return gtpa.getJointById(id);
     }
 
-    // ChatGPT slop, no idea if it works
+    public static void updateJoint(Level level, int id, VSJoint joint) {
+        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
+        gtpa.updateJoint(new VSJointAndId(id, joint));
+    }
+
+    // ChatGPT slop, seems to work
     private static Quaterniondc eulerXYZToQuaternion(double x, double y, double z) {
         var cx = Math.cos(x * 0.5);
         var sx = Math.sin(x * 0.5);
