@@ -1,0 +1,1 @@
+(JointUtil.makeDistanceJoint(${input$shipA}, ${input$shipB}, ${input$rotA}, ${input$rotB}, ${input$posA}, ${input$posB}, ${input$minDist}, ${input$maxDist}))

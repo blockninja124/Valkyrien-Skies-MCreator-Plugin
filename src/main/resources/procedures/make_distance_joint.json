@@ -29,12 +29,21 @@
       "type": "input_value",
       "name": "posB",
       "check": "Vec3"
+    },
+    {
+      "type": "input_value",
+      "name": "minDist",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "maxDist",
+      "check": "Number"
     }
   ],
   "inputsInline": false,
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": "#cca421",
+  "output": "VSJoint",
+  "colour": "#e3a010",
   "mcreator": {
     "toolbox_id": "vs_data",
     "inputs": [
@@ -43,7 +52,9 @@
       "rotA",
       "rotB",
       "posA",
-      "posB"
+      "posB",
+      "minDist",
+      "maxDist"
     ],
     "required_apis": [
       "valkyrienskies"

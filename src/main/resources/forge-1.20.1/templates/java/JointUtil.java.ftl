@@ -3,7 +3,6 @@ package ${package}.ships;
 public class JointUtil {
 
     public static VSJoint makeFixedJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB) {
-
         // Sussy
         Long bodyId1 = shipA != null ? shipA.getId() : null;
         Long bodyId2 = shipB != null ? shipB.getId() : null;
@@ -24,6 +23,30 @@ public class JointUtil {
         return new VSFixedJoint(bodyId1, poseA, bodyId2, poseB, null, 1.0E-10);
     }
 
+    public static VSJoint makeDistanceJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number minDistance, @Nullable Number maxDistance) {
+        // Sussy
+        Long bodyId1 = shipA != null ? shipA.getId() : null;
+        Long bodyId2 = shipB != null ? shipB.getId() : null;
+
+        Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
+        Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
+
+        VSJointPose poseA = new VSJointPose(
+                VectorConversionsMCKt.toJOML(positionA),
+                rotationAQuat
+        );
+
+        VSJointPose poseB = new VSJointPose(
+                VectorConversionsMCKt.toJOML(positionB),
+                rotationBQuat
+        );
+
+        Float minDist = minDistance != null ? minDistance.floatValue() : null;
+        Float maxDist = maxDistance != null ? maxDistance.floatValue() : null;
+
+        return new VSDistanceJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, minDist, maxDist, null, null, null);
+    }
+
     public static void addJoint(Level level, VSJoint joint, Consumer<Integer> idCallback) {
         GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
         gtpa.addJoint(joint, 0, idCallback);
@@ -34,6 +57,11 @@ public class JointUtil {
         gtpa.removeJoint(id);
     }
 
+    public static VSJoint getJointById(Level level, int id) {
+        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
+        gtpa.removeJoint(id);
+        return null;
+    }
 
     // ChatGPT slop, no idea if it works
     private static Quaterniondc eulerXYZToQuaternion(double x, double y, double z) {
