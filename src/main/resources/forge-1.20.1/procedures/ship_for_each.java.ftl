@@ -1,6 +1,6 @@
 {
     if (world instanceof ServerLevel) {
-        for (Ship shipiterator : VSGameUtilsKt.getAllShips((ServerLevel) world)) {
+        for (LoadedServerShip shipiterator : VSGameUtilsKt.getShipObjectWorld((ServerLevel) world).getLoadedShips()) {
             ${statement$foreach}
         }
     }
