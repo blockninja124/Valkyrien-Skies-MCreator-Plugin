@@ -1,0 +1,1 @@
+(JointUtil.getPosFromJoint(${input$joint}, ${field$id}))

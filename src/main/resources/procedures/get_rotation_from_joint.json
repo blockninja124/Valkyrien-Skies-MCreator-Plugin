@@ -1,0 +1,32 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "joint",
+      "check": "VSJoint"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "id",
+      "options": [
+        [ "1", "true" ],
+        [ "2", "false" ]
+      ]
+    }
+  ],
+  "inputsInline": true,
+  "output": "Vec3",
+  "colour": "#e3a010",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "inputs": [
+      "joint"
+    ],
+    "fields": [
+      "id"
+    ],
+    "required_apis": [
+      "valkyrienskies"
+    ]
+  }
+}

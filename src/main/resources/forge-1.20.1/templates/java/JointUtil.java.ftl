@@ -67,6 +67,32 @@ public class JointUtil {
         gtpa.updateJoint(new VSJointAndId(id, joint));
     }
 
+    public static @Nullable LoadedServerShip getShipFromJoint(Level level, VSJoint joint, boolean firstShip) {
+        if (joint == null) return null;
+        Long id = firstShip ? joint.getShipId0() : joint.getShipId1();
+        if (id == null) return null;
+        if (level instanceof ServerLevel) {
+            return VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).getLoadedShips().getById(id);
+        }
+        return null;
+    }
+
+    public static Vec3 getPosFromJoint(VSJoint joint, boolean firstPos) {
+        if (joint == null) return new Vec3(0, 0, 0);
+
+        Vector3dc pos = firstPos ? joint.getPose0().getPos() : joint.getPose1().getPos();
+
+        return VectorConversionsMCKt.toMinecraft(pos);
+    }
+
+    public static Vec3 getRotFromJoint(VSJoint joint, boolean firstRot) {
+        if (joint == null) return new Vec3(0, 0, 0);
+
+        Quaterniondc rot = firstRot ? joint.getPose0().getRot() : joint.getPose1().getRot();
+
+        return VectorConversionsMCKt.toMinecraft(quaternionToEulerXYZ(rot));
+    }
+
     // ChatGPT slop, seems to work
     private static Quaterniondc eulerXYZToQuaternion(double x, double y, double z) {
         var cx = Math.cos(x * 0.5);
@@ -83,4 +109,30 @@ public class JointUtil {
 
         return new Quaterniond(qx, qy, qz, qw);
     }
+
+    private static Vector3d quaternionToEulerXYZ(Quaterniondc quat) {
+
+            // Normalize defensively
+            var len = Math.sqrt(quat.x()*quat.x() + quat.y()*quat.y() + quat.z()*quat.z() + quat.w()*quat.w());
+            var xq = quat.x() / len;
+            var yq = quat.y() / len;
+            var zq = quat.z() / len;
+            var wq = quat.w() / len;
+
+            var x = Math.atan2(
+                    2.0 * (wq * xq - yq * zq),
+                    1.0 - 2.0 * (xq * xq + yq * yq)
+            );
+
+            var y = Math.asin(
+                    Math.max(-1.0, Math.min((2.0 * (wq * yq + xq * zq)), 1.0))
+            );
+
+            var z = Math.atan2(
+                    2.0 * (wq * zq - xq * yq),
+                    1.0 - 2.0 * (yq * yq + zq * zq)
+            );
+
+            return new Vector3d(x, y, z);
+        }
 }

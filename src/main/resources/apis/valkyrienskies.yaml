@@ -21,7 +21,7 @@ forge-1.20.1:
 
     dependencies {
     
-        String vs_version = "2.4.3+6faf19387f"
+        String vs_version = "2.4.5+32972c3f7e"
         String vs_core_version = "1.1.0+f446f50cff"
     
         implementation         ("org.valkyrienskies.core:api:${vs_core_version}")
