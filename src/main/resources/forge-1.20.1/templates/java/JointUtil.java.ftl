@@ -47,6 +47,39 @@ public class JointUtil {
         return new VSDistanceJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, minDist, maxDist, null, null, null);
     }
 
+    public static VSJoint makeRevoluteJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number lowerLimit, @Nullable Number upperLimit) {
+
+            // Sussy
+            Long bodyId1 = shipA != null ? shipA.getId() : null;
+            Long bodyId2 = shipB != null ? shipB.getId() : null;
+
+            Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
+            Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
+
+            VSJointPose poseA = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionA),
+                    rotationAQuat
+            );
+
+            VSJointPose poseB = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionB),
+                    rotationBQuat
+            );
+
+            VSD6Joint.AngularLimitPair limits = new VSD6Joint.AngularLimitPair(
+                    lowerLimit != null ? lowerLimit.floatValue() : Float.NEGATIVE_INFINITY,
+                    upperLimit != null ? upperLimit.floatValue() : Float.POSITIVE_INFINITY,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+
+            VSRevoluteJoint.VSRevoluteDriveVelocity driveVelocity = new VSRevoluteJoint.VSRevoluteDriveVelocity(0.0F, false);
+
+            return new VSRevoluteJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, limits, driveVelocity, null, null, true);
+        }
+
     public static void addJoint(Level level, VSJoint joint, Consumer<Integer> idCallback) {
         GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
         gtpa.addJoint(joint, 0, idCallback);
