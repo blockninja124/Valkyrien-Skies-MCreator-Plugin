@@ -2,52 +2,59 @@ package ${package}.ships;
 
 public class JointUtil {
 
-    public static VSJoint makeFixedJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB) {
-        // Sussy
-        Long bodyId1 = shipA != null ? shipA.getId() : null;
-        Long bodyId2 = shipB != null ? shipB.getId() : null;
+    public static @Nullable VSJoint makeFixedJoint(@Nullable Ship shipA_, @Nullable Ship shipB_, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB) {
+        if ((shipA_ instanceof ServerShip shipA) && (shipB_ instanceof ServerShip shipB)) {
+            // Sussy
+            Long bodyId1 = shipA != null ? shipA.getId() : null;
+            Long bodyId2 = shipB != null ? shipB.getId() : null;
 
-        Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
-        Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
+            Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
+            Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
 
-        VSJointPose poseA = new VSJointPose(
-                VectorConversionsMCKt.toJOML(positionA),
-                rotationAQuat
-        );
+            VSJointPose poseA = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionA),
+                    rotationAQuat
+            );
 
-        VSJointPose poseB = new VSJointPose(
-                VectorConversionsMCKt.toJOML(positionB),
-                rotationBQuat
-        );
+            VSJointPose poseB = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionB),
+                    rotationBQuat
+            );
 
-        return new VSFixedJoint(bodyId1, poseA, bodyId2, poseB, null, 1.0E-10);
+            return new VSFixedJoint(bodyId1, poseA, bodyId2, poseB, null, 1.0E-10);
+        }
+        return null;
     }
 
-    public static VSJoint makeDistanceJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number minDistance, @Nullable Number maxDistance) {
-        // Sussy
-        Long bodyId1 = shipA != null ? shipA.getId() : null;
-        Long bodyId2 = shipB != null ? shipB.getId() : null;
+    public static @Nullable VSJoint makeDistanceJoint(@Nullable Ship shipA_, @Nullable Ship shipB_, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number minDistance, @Nullable Number maxDistance) {
+        if ((shipA_ instanceof ServerShip shipA) && (shipB_ instanceof ServerShip shipB)) {
+            // Sussy
+            Long bodyId1 = shipA != null ? shipA.getId() : null;
+            Long bodyId2 = shipB != null ? shipB.getId() : null;
 
-        Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
-        Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
+            Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
+            Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
 
-        VSJointPose poseA = new VSJointPose(
-                VectorConversionsMCKt.toJOML(positionA),
-                rotationAQuat
-        );
+            VSJointPose poseA = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionA),
+                    rotationAQuat
+            );
 
-        VSJointPose poseB = new VSJointPose(
-                VectorConversionsMCKt.toJOML(positionB),
-                rotationBQuat
-        );
+            VSJointPose poseB = new VSJointPose(
+                    VectorConversionsMCKt.toJOML(positionB),
+                    rotationBQuat
+            );
 
-        Float minDist = minDistance != null ? minDistance.floatValue() : null;
-        Float maxDist = maxDistance != null ? maxDistance.floatValue() : null;
+            Float minDist = minDistance != null ? minDistance.floatValue() : null;
+            Float maxDist = maxDistance != null ? maxDistance.floatValue() : null;
 
-        return new VSDistanceJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, minDist, maxDist, null, null, null);
+            return new VSDistanceJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, minDist, maxDist, null, null, null);
+        }
+        return null;
     }
 
-    public static VSJoint makeRevoluteJoint(@Nullable ServerShip shipA, @Nullable ServerShip shipB, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number lowerLimit, @Nullable Number upperLimit) {
+    public static @Nullable VSJoint makeRevoluteJoint(@Nullable Ship shipA_, @Nullable Ship shipB_, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB, @Nullable Number lowerLimit, @Nullable Number upperLimit) {
+        if ((shipA_ instanceof ServerShip shipA) && (shipB_ instanceof ServerShip shipB)) {
 
             // Sussy
             Long bodyId1 = shipA != null ? shipA.getId() : null;
@@ -79,6 +86,8 @@ public class JointUtil {
 
             return new VSRevoluteJoint(bodyId1, poseA, bodyId2, poseB, null, VSJoint.DEFAULT_COMPLIANCE, limits, driveVelocity, null, null, true);
         }
+        return null;
+    }
 
     public static void addJoint(Level level, VSJoint joint, Consumer<Integer> idCallback) {
         GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
