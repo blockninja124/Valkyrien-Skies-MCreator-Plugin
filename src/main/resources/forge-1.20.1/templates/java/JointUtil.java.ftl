@@ -89,21 +89,8 @@ public class JointUtil {
     }
 
     public static void addJoint(Level level, VSJoint joint, Consumer<Integer> idCallback) {
-
-        //VSGameUtilsKt.getShipObjectWorld((ServerLevel) level).getAerodynamicUtils().updateGravityForDimension();
         GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(VSGameUtilsKt.getDimensionId(level));
         gtpa.addJoint(joint, 0, idCallback);
-
-        /*if(!level.isClientSide()) {
-            BlockPos _bp = BlockPos.ZERO;
-            BlockEntity _blockEntity = level.getBlockEntity(_bp);
-            BlockState _bs = level.getBlockState(_bp);
-            if(_blockEntity != null)
-                _blockEntity.getPersistentData().put.putString(${input$tagName}, ${input$tagValue});
-
-            if(world instanceof Level _level)
-                _level.sendBlockUpdated(_bp, _bs, _bs, 3);
-        }*/
     }
 
     public static CompoundTag jointToTag(VSJoint joint) {

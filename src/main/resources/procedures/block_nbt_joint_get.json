@@ -1,0 +1,33 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pos",
+      "check": "BlockPos"
+    },
+    {
+      "type": "input_value",
+      "name": "tagName",
+      "check": "String"
+    }
+  ],
+  "inputsInline": true,
+  "output": "VSJoint",
+  "colour": "#e3a010",
+  "mcreator": {
+    "toolbox_id": "vs_data",
+    "toolbox_init": [
+      "<field name=\"trigger\">no_ext_trigger</field></block><block type=\"block_nbt_joint_get\" x=\"91\" y=\"214\"><value name=\"tagName\"><block type=\"text\"><field name=\"TEXT\">tagName</field></block></value><value name=\"pos\"><block type=\"blockpos_containing\"><value name=\"x\"><block type=\"coord_x\"></block></value><value name=\"y\"><block type=\"coord_y\"></block></value><value name=\"z\"><block type=\"coord_z\"></block></value></block></value>"
+    ],
+    "inputs": [
+      "pos",
+      "tagName"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ]
+  }
+}

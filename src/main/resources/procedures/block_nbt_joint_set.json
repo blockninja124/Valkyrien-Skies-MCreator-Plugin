@@ -1,0 +1,40 @@
+{
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pos",
+      "check": "BlockPos"
+    },
+    {
+      "type": "input_value",
+      "name": "tagName",
+      "check": "String"
+    },
+    {
+      "type": "input_value",
+      "name": "tagValue",
+      "check": "VSJoint"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": "#e3a010",
+  "mcreator": {
+    "toolbox_id": "vs_actions",
+    "toolbox_init": [
+      "<value name=\"tagName\"><block type=\"text\"><field name=\"TEXT\">tagName</field></block></value><value name=\"pos\"><block type=\"blockpos_containing\"><value name=\"x\"><block type=\"coord_x\"></block></value><value name=\"y\"><block type=\"coord_y\"></block></value><value name=\"z\"><block type=\"coord_z\"></block></value></block></value>"
+    ],
+    "inputs": [
+      "pos",
+      "tagName",
+      "tagValue"
+    ],
+    "dependencies": [
+      {
+        "name": "world",
+        "type": "world"
+      }
+    ]
+  }
+}
