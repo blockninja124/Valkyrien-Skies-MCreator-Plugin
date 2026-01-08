@@ -51,7 +51,8 @@
       "valkyrienskies"
     ],
     "warnings": [
-      "async_callback"
+      "async_callback",
+      "lambda"
     ]
   }
 }

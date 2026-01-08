@@ -20,6 +20,9 @@
         "type": "world"
       }
     ],
+    "warnings": [
+      "only_on_2_4_4"
+    ],
     "required_apis": [
       "valkyrienskies"
     ]
