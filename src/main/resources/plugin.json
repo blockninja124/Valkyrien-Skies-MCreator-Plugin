@@ -11,7 +11,7 @@
   ],
   "info": {
     "name": "Valkyrien Plugin",
-    "version": "1.5",
+    "version": "2.2",
     "description": "Allows some limited use of Valkyrien Skies",
     "author": "blockninja124",
     "dependencies":  [
