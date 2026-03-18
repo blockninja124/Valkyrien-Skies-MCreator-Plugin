@@ -9,9 +9,19 @@
       "type": "input_value",
       "name": "vec",
       "check": "Vec3"
+    },
+    {
+      "type": "input_value",
+      "name": "entity_range",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "ship_range",
+      "check": "Number"
     }
   ],
-  "inputsInline": true,
+  "inputsInline": false,
   "nextStatement": null,
   "previousStatement": null,
   "colour": "#cca421",
@@ -22,7 +32,9 @@
     ],
     "inputs": [
       "ship",
-      "vec"
+      "vec",
+      "entity_range",
+      "ship_range"
     ],
     "dependencies": [
       {

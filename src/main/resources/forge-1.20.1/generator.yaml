@@ -77,14 +77,35 @@ base_templates:
   - template: java/ShipMaker.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/ShipMaker.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
-  - template: java/TeleportHandler.java.ftl
-    name: "@SRCROOT/@BASEPACKAGEPATH/ships/TeleportHandler.java"
-    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   - template: java/ShipLandingAttachment.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/ShipLandingAttachment.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   - template: java/JointUtil.java.ftl
     name: "@SRCROOT/@BASEPACKAGEPATH/ships/JointUtil.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/DimensionTravelTeleporter.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/DimensionTravelTeleporter.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/package-info.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/package-info.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/TeleportData.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/TeleportData.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/TravelDirection.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/TravelDirection.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/impl/EntityCollector.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/impl/EntityCollector.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/impl/EntityTeleporter.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/impl/EntityTeleporter.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/impl/ShipCollector.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/impl/ShipCollector.java"
+    condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
+  - template: java/teleportation/impl/ShipTeleporter.java.ftl
+    name: "@SRCROOT/@BASEPACKAGEPATH/ships/teleportation/impl/ShipTeleporter.java"
     condition: ${w.getWorkspace().getWorkspaceSettings().getMCreatorDependencies().contains("valkyrienskies")}
   # Mixins
   - template: modbase/mixins.json.ftl

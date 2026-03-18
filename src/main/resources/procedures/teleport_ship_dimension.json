@@ -12,11 +12,29 @@
     },
     {
       "type": "input_value",
+      "name": "entity_range",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "ship_range",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
       "name": "str",
       "check": "String"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "mode",
+      "options": [
+        [ "Top", "PLANET_TO_SPACE" ],
+        [ "Bottom", "SPACE_TO_PLANET" ]
+      ]
     }
   ],
-  "inputsInline": true,
+  "inputsInline": false,
   "nextStatement": null,
   "previousStatement": null,
   "colour": "#cca421",
@@ -29,7 +47,12 @@
     "inputs": [
       "ship",
       "vec",
+      "entity_range",
+      "ship_range",
       "str"
+    ],
+    "fields": [
+      "mode"
     ],
     "dependencies": [
       {

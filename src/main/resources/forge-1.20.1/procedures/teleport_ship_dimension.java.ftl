@@ -1,8 +1,16 @@
+<#-- @formatter:off -->
 {
     if (world instanceof ServerLevel && ${input$ship} instanceof Ship) {
-        ServerLevel newLvl = TeleportHandler.dimToLevel(${input$str});
-        if (newLvl != null) {
-           new TeleportHandler(newLvl, (ServerLevel) world, false).handleTeleport(${input$ship}, VectorConversionsMCKt.toJOML(${input$vec}));
-        }
+        DimensionTravelTeleporter.teleportShip(
+        	    ${input$ship},
+        	    TravelDirection.${field$mode},
+        	    (ServerLevel) world,
+        	    DimensionTravelTeleporter.dimToLevel(${input$str}),
+        	    VectorConversionsMCKt.toJOML(${input$vec}),
+        	    ${input$ship}.getTransform().getShipToWorldRotation(),
+        	    ${input$entity_range},
+        	    ${input$ship_range}
+        );
     }
 }
+<#-- @formatter:on -->

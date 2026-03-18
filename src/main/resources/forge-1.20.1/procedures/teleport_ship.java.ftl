@@ -1,7 +1,16 @@
+<#-- @formatter:off -->
 {
     if (world instanceof ServerLevel && ${input$ship} instanceof Ship) {
-        //TODO: FIX
-        throw new NotImplementedException("Teleport function not working yet on 2.4");
-        //new TeleportHandler((ServerLevel) world, (ServerLevel) world, false).handleTeleport(${input$ship}, VectorConversionsMCKt.toJOML(${input$vec}));
+        DimensionTravelTeleporter.teleportShip(
+    	    ${input$ship},
+    	    TravelDirection.PLANET_TO_SPACE,
+    	    (ServerLevel) world,
+    	    (ServerLevel) world,
+    	    VectorConversionsMCKt.toJOML(${input$vec}),
+    	    ${input$ship}.getTransform().getShipToWorldRotation(),
+    	    ${input$entity_range},
+    	    ${input$ship_range}
+    	);
     }
 }
+<#-- @formatter:on -->
