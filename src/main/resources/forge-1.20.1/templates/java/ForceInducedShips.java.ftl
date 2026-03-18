@@ -24,15 +24,16 @@ public final class ForceInducedShips implements ShipPhysicsListener {
 
             double scale = data.throttle;
 
-            if (autoScale) {
-                scale = scale * Math.pow(physShip.getTransform().getShipToWorldScaling().x(), 5);
-            }
-
-            Vector3d rot = data.rot.mul(scale);
+            Vector3d rot = data.rot;
 
             if (data.mode == ForceMode.GLOBAL) {
+                if (autoScale) {
+                    scale = scale * Math.pow(physShip.getTransform().getShipToWorldScaling().x(), 5);
+                }
+                rot = rot.mul(scale);
                 physShip.applyInvariantTorque(rot);
             } else {
+                rot = rot.mul(scale);
                 physShip.applyRotDependentTorque(rot);
             }
         }
@@ -65,7 +66,6 @@ public final class ForceInducedShips implements ShipPhysicsListener {
             direction.mul(throttle);
 
             if (data.mode == ForceMode.GLOBAL) {
-
                 physShip.applyInvariantForce(direction);
             } else {
 
