@@ -1,10 +1,9 @@
 {
   "valkyien_plugin": {
-    "latest": "1.7",
+    "latest": "2.2",
     "changes": [
-      "Can get ships in a specified area",
-      "NOTE: 2025.2 support has been broken by the forge 1.20.1 plugin updating",
-      "We will provide a new release supporting it properly soon-ish"
+      "Should hopefully work with MCreator 2025 now",
+      "Added auto-scaling for forces and torques"
     ]
   }
 }
