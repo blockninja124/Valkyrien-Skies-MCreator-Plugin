@@ -11,6 +11,8 @@ public final class ForceInducedShips implements ShipPhysicsListener {
     public HashMap<String, Boolean> boolData = new HashMap<>();
     public HashMap<String, String> strData = new HashMap<>();
 
+    public boolean autoScale = true;
+
     public ForceInducedShips() {}
 
     @Override
@@ -20,12 +22,18 @@ public final class ForceInducedShips implements ShipPhysicsListener {
         while(!nextTickRotations.isEmpty()) {
             RotData data = nextTickRotations.pop();
 
-            //TODO: fix me
+            double scale = data.throttle;
+
+            if (autoScale) {
+                scale = scale * Math.pow(physShip.getTransform().getShipToWorldScaling().x(), 5);
+            }
+
+            Vector3d rot = data.rot.mul(scale);
 
             if (data.mode == ForceMode.GLOBAL) {
-                physShip.applyInvariantTorque(data.rot);
+                physShip.applyInvariantTorque(rot);
             } else {
-                physShip.applyRotDependentTorque(data.rot);
+                physShip.applyRotDependentTorque(rot);
             }
         }
 
@@ -40,6 +48,10 @@ public final class ForceInducedShips implements ShipPhysicsListener {
             double throttle = data.throttle;
             if (throttle == 0.0) {
                 continue;
+            }
+
+            if (autoScale) {
+                throttle = throttle * Math.pow(physShip.getTransform().getShipToWorldScaling().x(), 3);
             }
 
             Vector3d direction;
@@ -78,8 +90,8 @@ public final class ForceInducedShips implements ShipPhysicsListener {
         nextTickRotations.push(data);
     }
 
-    public void addRotation(Vector3d rot, ForceMode mode) {
-        nextTickRotations.push(new RotData(rot, mode));
+    public void addRotation(Vector3d rot, double throttle, ForceMode mode) {
+        nextTickRotations.push(new RotData(rot, throttle, mode));
     }
 
 
