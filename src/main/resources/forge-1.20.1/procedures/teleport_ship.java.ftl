@@ -1,8 +1,8 @@
 <#-- @formatter:off -->
 {
-    if (world instanceof ServerLevel && ${input$ship} instanceof Ship) {
+    if (world instanceof ServerLevel && ${input$ship} instanceof ServerShip) {
         DimensionTravelTeleporter.teleportShip(
-    	    ${input$ship},
+    	    (ServerShip) ${input$ship},
     	    TravelDirection.PLANET_TO_SPACE,
     	    (ServerLevel) world,
     	    (ServerLevel) world,
