@@ -1,9 +1,10 @@
 {
   "valkyien_plugin": {
-    "latest": "2.2",
+    "latest": "2.3",
     "changes": [
-      "Should hopefully work with MCreator 2025 now",
-      "Added auto-scaling for forces and torques"
+      "Fixed ship scaling block",
+      "Fixed a rare gradle issue with net.minecraftforge:mergetools",
+      "Added 'world' property to ship load event"
     ]
   }
 }
