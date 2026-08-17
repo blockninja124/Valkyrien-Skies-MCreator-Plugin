@@ -1,10 +1,9 @@
 {
-  "valkyien_plugin": {
-    "latest": "2.3",
+  "valkyrien_plugin": {
+    "latest": "2.4",
     "changes": [
-      "Fixed ship scaling block",
-      "Fixed a rare gradle issue with net.minecraftforge:mergetools",
-      "Added 'world' property to ship load event"
+      "Added 'for each connected ship' block",
+      "Added 'for each attached joint' block"
     ]
   }
 }
