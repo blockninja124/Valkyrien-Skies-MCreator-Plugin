@@ -63,7 +63,8 @@ tasks.register('runMCreatorWithPlugin', Exec) {
     description = 'Run MCreator after building plugin'
     dependsOn tasks.deployPlugin
 
-    commandLine exe_path
+    workingDir = file("${run_path}")
+    commandLine "sh", exe_path
 }
 
 test {
