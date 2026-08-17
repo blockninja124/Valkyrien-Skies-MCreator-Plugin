@@ -3,6 +3,10 @@
       {
         "name": "loadedShip",
         "type": "ship"
+      },
+      {
+        "name": "world",
+        "type": "world"
       }
     ],
     "cancelable": "false",

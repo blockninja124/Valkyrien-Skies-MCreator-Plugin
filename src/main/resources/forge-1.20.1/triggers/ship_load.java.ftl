@@ -5,7 +5,8 @@ public class ${name}Procedure {
         VSEvents.ShipLoadEvent.Companion.on((shipLoadEvent) -> {
             <#assign dependenciesCode><#compress>
                 <@procedureDependenciesCode dependencies, {
-                    "loadedShip": "shipLoadEvent.getShip()"
+                    "loadedShip": "shipLoadEvent.getShip()",
+                    "world": "VSGameUtilsKt.getLevelFromDimensionId(ValkyrienSkiesMod.getCurrentServer(), shipLoadEvent.getShip().getChunkClaimDimension())"
                 }/>
             </#compress></#assign>
             execute(<#if dependenciesCode?has_content>${dependenciesCode}</#if>);
