@@ -15,6 +15,7 @@ forge-1.20.1:
             content {
                 excludeGroup("org.spongepowered")
                 excludeGroup("net.jodah")
+                excludeGroup("net.minecraftforge")
             }
         }
     }
