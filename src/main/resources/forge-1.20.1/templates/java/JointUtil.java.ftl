@@ -2,6 +2,22 @@ package ${package}.ships;
 
 public class JointUtil {
 
+    public static Set<VSJoint> getJointsFromShip(LevelAccessor world, Ship ship) {
+        if (ship == null) return Collections.emptySet();
+        String dimensionId = VSGameUtilsKt.getDimensionId((Level) world);
+        GameToPhysicsAdapter gtpa = ValkyrienSkiesMod.getOrCreateGTPA(dimensionId);
+        Set<VSJoint> joints = new HashSet<>(Collections.emptySet());
+        Set<Integer> jointIds = gtpa.getJointsFromShip(ship.getId());
+        if (jointIds == null) return joints;
+        for (int jointId : jointIds) {
+            VSJoint joint = gtpa.getJointById(jointId);
+            if (joint != null) {
+                joints.add(joint);
+            }
+        }
+        return joints;
+    }
+
     public static VSJoint makeFixedJoint(@Nullable Long bodyId1, @Nullable Long bodyId2, Vec3 rotationA, Vec3 rotationB, Vec3 positionA, Vec3 positionB) {
         Quaterniondc rotationAQuat = eulerXYZToQuaternion(rotationA.x(), rotationA.y(), rotationA.z());
         Quaterniondc rotationBQuat = eulerXYZToQuaternion(rotationB.x(), rotationB.y(), rotationB.z());
